@@ -1,0 +1,11 @@
+product:
+geography:
+pricing_hypothesis:
+ACV_usd:
+motion:
+stage:
+team_size:
+budget_monthly_usd:
+existing_audience:
+channels_already_available:
+failed_channels:

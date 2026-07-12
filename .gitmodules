@@ -1,0 +1,3 @@
+[submodule "vendor/agent-gtm-skills"]
+	path = vendor/agent-gtm-skills
+	url = https://github.com/chadboyda/agent-gtm-skills.git
