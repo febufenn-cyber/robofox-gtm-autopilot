@@ -6,3 +6,27 @@
 
 __pycache__/
 *.pyc
+
+# Phase 0: private operating data never belongs in the public engine.
+workspace/
+private/
+customers/
+exports/
+hubspot-data/
+meta-data/
+call-recordings/
+transcripts/
+approvals/live/
+secrets/
+credentials/
+tokens/
+
+# Sensitive or export-oriented formats are blocked by default.
+*.pem
+*.key
+*.p12
+*.csv
+*.xlsx
+*.sqlite
+*.sqlite3
+*.db

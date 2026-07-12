@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "sources": {
+    "agent-gtm-skills": {
+      "repository": "https://github.com/chadboyda/agent-gtm-skills.git",
+      "approved_commit": "44f6a3d4daf65c8b82bf11e3a39edb1fbff40f1d",
+      "approved_scope": ["positioning-icp", "solo-founder-gtm", "ai-cold-outreach", "ai-pricing"],
+      "auto_update": false
+    }
+  }
+}

@@ -104,3 +104,13 @@ for skill_file in sorted((ROOT / '.claude/skills').glob('*/SKILL.md')):
 print('- natural trigger: build a channel plan for my voice agent product')
 print('- natural trigger: run my weekly GTM kill review')
 print('- dry-run plan obeys <$500 owned-channel gate and cites benchmarks')
+
+# Phase 0 is part of repository validity.
+from phase0_policy import verify as verify_phase0
+phase0_errors = verify_phase0(ROOT)
+if phase0_errors:
+    print('PHASE0 VERIFY: FAIL')
+    for error in phase0_errors:
+        print(f'- {error}')
+    sys.exit(1)
+print('- Phase 0 default-deny, public/private, schema, scanner, and source-lock checks pass')

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "engine_root": "~/projects/robofox-gtm-autopilot",
+  "workspace_root": "~/private/robofox-gtm-workspace",
+  "workspace_repository_visibility": "private",
+  "allow_workspace_inside_engine": false,
+  "default_classification": "INTERNAL",
+  "store_customer_identifiers": false
+}

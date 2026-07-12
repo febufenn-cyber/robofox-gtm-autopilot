@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/approval.schema.json",
+  "title": "Robofox GTM Exact Approval",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["approval_id", "action_id", "manifest_hash", "approved_by", "approved_at", "expires_at", "single_use"],
+  "properties": {
+    "approval_id": {"type": "string", "pattern": "^APR-[0-9]{4}-[0-9]{5,}$"},
+    "action_id": {"type": "string"},
+    "manifest_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "approved_by": {"type": "string", "minLength": 1},
+    "approved_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "single_use": {"const": true},
+    "consumed_at": {"type": ["string", "null"], "format": "date-time"}
+  }
+}

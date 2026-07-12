@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/action-manifest.schema.json",
+  "title": "Robofox GTM Action Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["action_id", "action_type", "task_id", "scope", "payload_hash", "requested_by", "created_at"],
+  "properties": {
+    "action_id": {"type": "string", "pattern": "^ACT-[0-9]{4}-[0-9]{5,}$"},
+    "action_type": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string"},
+    "experiment_id": {"type": ["string", "null"]},
+    "scope": {"type": "object"},
+    "payload_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "requested_by": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "maximum_records": {"type": "integer", "minimum": 0},
+    "maximum_spend": {"type": "number", "minimum": 0},
+    "currency": {"type": ["string", "null"], "pattern": "^[A-Z]{3}$"}
+  }
+}

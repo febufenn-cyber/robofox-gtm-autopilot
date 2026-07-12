@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/evidence.schema.json",
+  "title": "Robofox GTM Evidence Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evidence_id", "source_type", "source_reference", "captured_at", "valid_as_of", "claim", "state", "confidence", "classification", "direct_or_inferred"],
+  "properties": {
+    "evidence_id": {"type": "string", "pattern": "^EVD-[0-9]{4}-[0-9]{5,}$"},
+    "source_type": {"type": "string"},
+    "source_reference": {"type": "string"},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "valid_as_of": {"type": "string", "format": "date-time"},
+    "product": {"type": ["string", "null"]},
+    "segment": {"type": ["string", "null"]},
+    "claim": {"type": "string", "minLength": 1},
+    "state": {"enum": ["VERIFIED", "OBSERVED", "INFERRED", "ASSUMED", "STALE", "CONFLICTED", "UNKNOWN", "PROHIBITED"]},
+    "confidence": {"enum": ["low", "medium", "high"]},
+    "classification": {"enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]},
+    "direct_or_inferred": {"enum": ["direct", "inferred"]}
+  }
+}

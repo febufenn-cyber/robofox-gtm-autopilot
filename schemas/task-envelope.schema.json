@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/task-envelope.schema.json",
+  "title": "Robofox GTM Task Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "intent", "autonomy_level", "external_actions_allowed", "financial_actions_allowed", "customer_data_scope"],
+  "properties": {
+    "task_id": {"type": "string", "pattern": "^TASK-[0-9]{4}-[0-9]{4,}$"},
+    "intent": {"enum": ["observe", "recommend", "draft", "approve", "execute", "monitor"]},
+    "product": {"type": ["string", "null"]},
+    "requested_output": {"type": "string", "minLength": 1},
+    "autonomy_level": {"enum": ["L0", "L1", "L2", "L3", "L4"]},
+    "external_actions_allowed": {"type": "boolean"},
+    "financial_actions_allowed": {"type": "boolean"},
+    "customer_data_scope": {"enum": ["none", "aggregate_only", "pseudonymous", "identified"]},
+    "expires_at": {"type": ["string", "null"], "format": "date-time"}
+  }
+}

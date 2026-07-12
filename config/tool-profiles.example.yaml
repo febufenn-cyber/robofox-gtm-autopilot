@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "default_profile": "gtm-analysis",
+  "profiles": {
+    "gtm-analysis": {
+      "hubspot": ["read_aggregate", "read_pseudonymous"],
+      "meta_ads": ["read_metrics"],
+      "filesystem": ["engine_read", "workspace_read", "approved_output_write"],
+      "external_execution": false
+    },
+    "gtm-drafting": {
+      "hubspot": ["read_aggregate", "read_pseudonymous"],
+      "meta_ads": ["read_metrics"],
+      "filesystem": ["engine_read", "workspace_read", "draft_write"],
+      "external_execution": false
+    },
+    "gtm-execution": {
+      "enabled": false,
+      "external_execution": false
+    }
+  }
+}
