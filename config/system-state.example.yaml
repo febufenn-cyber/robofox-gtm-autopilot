@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "autonomy_level": "L1",
+  "execution_enabled": false,
+  "kill_switch": true,
+  "timezone": "Asia/Kolkata",
+  "workspace_mode": "private_external_path",
+  "disabled_capabilities": [
+    "crm_write",
+    "email_send",
+    "whatsapp_send",
+    "phone_call",
+    "public_publish",
+    "meta_campaign_write",
+    "meta_budget_write",
+    "contact_export"
+  ]
+}

@@ -145,7 +145,7 @@ python3 scripts/verify_repo.py
 
 The verification checks structure, product fields, `<500`-line skill limits, negative trigger boundaries, natural prompt triggers, benchmark citation, the owned-channel budget gate, kill criteria, and Week 1–13 coverage.
 
-## 8. Publish the private GitHub repository
+## 8. Repository publication
 
 The local repository is already initialized and committed on `main`. On a machine with an authenticated GitHub CLI, run:
 
@@ -158,11 +158,37 @@ Defaults:
 ```text
 owner: febufenn-cyber
 repository: robofox-gtm-autopilot
-visibility: private
+visibility: choose deliberately; keep operating data in a separate private workspace
 ```
 
 The script refuses to publish a dirty worktree or overwrite an existing `origin`. Override only when intentional:
 
 ```bash
 GITHUB_OWNER=<owner> GITHUB_REPO=<name> GITHUB_VISIBILITY=private ./scripts/publish-github.sh
+```
+
+## 9. Phase 0 constitutional boundary
+
+Phase 0 adds machine-checkable safeguards around the GTM skills:
+
+- L1 advisory autonomy and an active-by-default kill switch
+- default-deny action registry
+- external sends, calls, CRM writes, ad changes, spending, publishing, and contact export disabled
+- public-engine/private-workspace separation
+- evidence-state, data-classification, and channel-contactability policies
+- prompt-injection boundaries for CRM, MCP, web, document, and transcript content
+- exact action-manifest and approval schemas
+- public-repository scanning, source pinning, adversarial tests, and CI
+
+Read [`PHASE0.md`](PHASE0.md) and [`policies/constitution.md`](policies/constitution.md), then run:
+
+```bash
+python3 scripts/verify_phase0.py
+python3 -m unittest discover -s tests/phase0 -p 'test_*.py' -v
+```
+
+Create the operating workspace outside this public engine:
+
+```bash
+python3 scripts/bootstrap_private_workspace.py ~/private/robofox-gtm-workspace
 ```

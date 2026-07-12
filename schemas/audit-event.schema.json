@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/audit-event.schema.json",
+  "title": "Robofox GTM Redacted Audit Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "occurred_at", "task_id", "event_type", "actor", "decision", "data_classification"],
+  "properties": {
+    "event_id": {"type": "string"},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "task_id": {"type": "string"},
+    "event_type": {"type": "string"},
+    "actor": {"type": "string"},
+    "decision": {"enum": ["allow", "deny", "block", "error", "observe"]},
+    "action_type": {"type": ["string", "null"]},
+    "record_count": {"type": "integer", "minimum": 0},
+    "fields_accessed": {"type": "array", "items": {"type": "string"}},
+    "personal_fields_read": {"type": "boolean"},
+    "data_classification": {"enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]},
+    "reason_code": {"type": ["string", "null"]}
+  }
+}

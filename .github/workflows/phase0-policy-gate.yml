@@ -1,0 +1,27 @@
+name: Phase 0 policy gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  phase0:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          submodules: recursive
+          fetch-depth: 1
+      - name: Verify existing GTM repository
+        run: python3 scripts/verify_repo.py
+      - name: Verify Phase 0 constitution
+        run: python3 scripts/verify_phase0.py
+      - name: Run adversarial policy tests
+        run: python3 -m unittest discover -s tests/phase0 -p 'test_*.py' -v
+      - name: Scan public repository
+        run: python3 scripts/scan_public_repo.py
