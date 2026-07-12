@@ -85,6 +85,14 @@ class Phase0PolicyTests(unittest.TestCase):
             self.assertTrue(any("blocked private-data path" in item for item in findings))
             self.assertTrue(any("personal email" in item for item in findings))
 
+    def test_scanner_skips_initialized_gitlink_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gitlink = root / "vendor/agent-gtm-skills"
+            gitlink.mkdir(parents=True)
+            with patch("phase0_policy.tracked_files", return_value=[gitlink]):
+                self.assertEqual(scan_public_repo(root), [])
+
     def test_contactability_uses_most_restrictive_status(self):
         self.assertEqual(
             most_restrictive_contact_status(["opted_in", "opted_out", "unknown"]),

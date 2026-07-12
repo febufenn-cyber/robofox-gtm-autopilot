@@ -129,7 +129,9 @@ def scan_public_repo(root: Path = ROOT) -> list[str]:
             findings.append(f"blocked private-data path: {relative}")
         if path.suffix.lower() in BLOCKED_SUFFIXES:
             findings.append(f"blocked sensitive/export file type: {relative}")
-        if not path.exists() or not is_text_candidate(path):
+        # Git submodules appear in `git ls-files` as gitlinks. Once initialized,
+        # the gitlink path is a directory, not a readable file; skip it safely.
+        if not path.exists() or not path.is_file() or not is_text_candidate(path):
             continue
         try:
             text = path.read_text(encoding="utf-8")
