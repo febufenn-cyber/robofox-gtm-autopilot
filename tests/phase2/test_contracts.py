@@ -15,6 +15,11 @@ class ContractTests(unittest.TestCase):
         s=json.loads((ROOT/'schemas/adversarial-review.schema.json').read_text())
         self.assertTrue(s['properties']['blind_review']['const'])
         self.assertFalse(s['properties']['saw_other_critiques']['const'])
+    def test_independent_assessment_contract(self):
+        c=json.loads((ROOT/'schemas/candidate-move.schema.json').read_text())
+        a=json.loads((ROOT/'schemas/score-assessment.schema.json').read_text())
+        self.assertNotIn('scores',c['properties'])
+        self.assertEqual('ARBITER',a['properties']['assessor_role']['const'])
     def test_no_move_statuses_exist(self):
         s=json.loads((ROOT/'schemas/decision-record.schema.json').read_text())
         values=set(s['properties']['status']['enum'])

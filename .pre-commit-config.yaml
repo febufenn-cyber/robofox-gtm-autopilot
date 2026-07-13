@@ -11,6 +11,11 @@ repos:
         entry: python3 scripts/verify_phase1.py
         language: system
         pass_filenames: false
+      - id: robofox-phase2
+        name: Robofox Phase 2 decision gate
+        entry: python3 scripts/verify_phase2.py
+        language: system
+        pass_filenames: false
       - id: robofox-public-scan
         name: Robofox public repository scan
         entry: python3 scripts/scan_public_repo.py

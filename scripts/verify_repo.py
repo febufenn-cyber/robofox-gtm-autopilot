@@ -124,3 +124,13 @@ if phase1_errors:
         print(f'- {error}')
     sys.exit(1)
 print('- Phase 1 contracts, ledger, position, approval, and integrity checks pass')
+
+# Phase 2 is part of repository validity.
+from verify_phase2 import verify as verify_phase2
+phase2_errors = verify_phase2()
+if phase2_errors:
+    print('PHASE2 VERIFY: FAIL')
+    for error in phase2_errors:
+        print(f'- {error}')
+    sys.exit(1)
+print('- Phase 2 frozen-position, role-separation, deterministic arbitration, and replay checks pass')

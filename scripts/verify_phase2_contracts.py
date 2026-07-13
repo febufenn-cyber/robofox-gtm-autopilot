@@ -6,11 +6,14 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
   "PHASE2.md","policies/decision-layer-policy.md","config/decision-weights.json",
   "schemas/candidate-move.schema.json","schemas/adversarial-review.schema.json",
-  "schemas/decision-request.schema.json","schemas/decision-record.schema.json",
+  "schemas/score-assessment.schema.json","schemas/decision-request.schema.json","schemas/decision-record.schema.json",
   "decisions/ADR-0009-freeze-position-before-calculation.md",
   "decisions/ADR-0010-independent-planner-and-critic.md",
   "decisions/ADR-0011-deterministic-bounded-arbitration.md",
-  "decisions/ADR-0012-no-move-is-valid.md"
+  "decisions/ADR-0012-no-move-is-valid.md",
+  "decisions/ADR-0013-independent-arbiter-scoring.md",
+  "CLAUDE.md", ".pre-commit-config.yaml", ".github/workflows/phase0-policy-gate.yml",
+  "scripts/verify_phase2.py", "scripts/prepare_decision_pack.py", "scripts/verify_decision_record.py"
 ]
 def verify(root: Path = ROOT) -> list[str]:
     errors=[]
@@ -30,10 +33,39 @@ def verify(root: Path = ROOT) -> list[str]:
         if abs(sum(w.get('positive_weights',{}).values())-1.0)>1e-9: errors.append('positive weights must sum to 1')
         if w.get('candidate_count')!={'minimum':2,'maximum':5}: errors.append('candidate count must be 2..5')
         if w.get('tie_break_order',[])[-1:] != ['candidate_id']: errors.append('candidate_id must be final deterministic tie-break')
+
+    registry_path=root/'policies/action-registry.yaml'
+    if registry_path.is_file():
+        try:
+            registry=json.loads(registry_path.read_text())
+            actions=registry.get('actions',{})
+            required_actions={
+                'prepare_decision_pack','draft_candidate_moves','draft_adversarial_reviews',
+                'draft_score_assessments','run_decision_arbitration','verify_decision_record'
+            }
+            missing=sorted(required_actions-set(actions))
+            if missing: errors.append(f'action registry missing Phase 2 actions: {missing}')
+            for name in required_actions:
+                action=actions.get(name,{})
+                if action.get('external') is not False or action.get('enabled') is not True:
+                    errors.append(f'Phase 2 action must be enabled and internal: {name}')
+                if action.get('approval') != 'none':
+                    errors.append(f'Phase 2 advisory action must not claim execution approval: {name}')
+            if actions.get('run_decision_arbitration',{}).get('output_root')!='decisions/':
+                errors.append('decision arbitration output_root must be decisions/')
+        except (OSError,json.JSONDecodeError) as exc:
+            errors.append(f'invalid action registry: {exc}')
+
+    boundary=root/'CLAUDE.md'
+    if boundary.is_file():
+        text=boundary.read_text()
+        for phrase in ('PLANNER proposes without scores','blind CRITIC','ARBITER scores only after','never execution approval'):
+            if phrase not in text: errors.append(f'CLAUDE boundary missing: {phrase}')
+
     policy=(root/'policies/decision-layer-policy.md')
     if policy.is_file():
         text=policy.read_text()
-        for phrase in ('Frozen board position','Adversarial independence','Hard gates before scoring','Deterministic arbitration','No-move is valid','External-action boundary','Fail closed'):
+        for phrase in ('Frozen board position','Adversarial independence','Independent arbiter assessment','Hard gates before scoring','Deterministic arbitration','No-move is valid','External-action boundary','Fail closed'):
             if phrase not in text: errors.append(f"decision policy missing section: {phrase}")
     return errors
 if __name__=='__main__':

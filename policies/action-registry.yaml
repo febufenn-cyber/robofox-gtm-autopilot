@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "default_decision": "deny",
   "actions": {
     "read_product_context": {
@@ -19,6 +19,14 @@
       "reversible": true
     },
     "verify_truth_integrity": {
+      "risk": "low",
+      "minimum_level": "L0",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "verify_decision_record": {
       "risk": "low",
       "minimum_level": "L0",
       "approval": "none",
@@ -59,6 +67,48 @@
       "external": false,
       "reversible": true,
       "output_root": "approvals/pending/"
+    },
+    "prepare_decision_pack": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true,
+      "output_root": "decisions/work/"
+    },
+    "draft_candidate_moves": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "draft_adversarial_reviews": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "draft_score_assessments": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "run_decision_arbitration": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true,
+      "output_root": "decisions/"
     },
     "approve_truth_action": {
       "risk": "high",
