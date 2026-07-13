@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/score-assessment.schema.json",
+  "title": "Robofox independent candidate score assessment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version","assessment_id","candidate_id","snapshot_hash","assessor_role","saw_all_candidates","saw_critiques","scores","justifications","assessed_at"],
+  "properties": {
+    "version": {"const": 1},
+    "assessment_id": {"type": "string", "pattern": "^AST-[A-Z0-9-]{6,80}$"},
+    "candidate_id": {"type": "string", "pattern": "^MOV-"},
+    "snapshot_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "assessor_role": {"const": "ARBITER"},
+    "saw_all_candidates": {"const": true},
+    "saw_critiques": {"const": true},
+    "scores": {
+      "type": "object", "additionalProperties": false,
+      "required": ["constraint_alignment","learning_value","reversibility","execution_feasibility","conversion_readiness"],
+      "properties": {
+        "constraint_alignment": {"type": "integer", "minimum": 1, "maximum": 5},
+        "learning_value": {"type": "integer", "minimum": 1, "maximum": 5},
+        "reversibility": {"type": "integer", "minimum": 1, "maximum": 5},
+        "execution_feasibility": {"type": "integer", "minimum": 1, "maximum": 5},
+        "conversion_readiness": {"type": "integer", "minimum": 1, "maximum": 5}
+      }
+    },
+    "justifications": {
+      "type": "object", "additionalProperties": false,
+      "required": ["constraint_alignment","learning_value","reversibility","execution_feasibility","conversion_readiness"],
+      "properties": {
+        "constraint_alignment": {"type": "string", "minLength": 10, "maxLength": 1000},
+        "learning_value": {"type": "string", "minLength": 10, "maxLength": 1000},
+        "reversibility": {"type": "string", "minLength": 10, "maxLength": 1000},
+        "execution_feasibility": {"type": "string", "minLength": 10, "maxLength": 1000},
+        "conversion_readiness": {"type": "string", "minLength": 10, "maxLength": 1000}
+      }
+    },
+    "assessed_at": {"type": "string", "format": "date-time"}
+  }
+}

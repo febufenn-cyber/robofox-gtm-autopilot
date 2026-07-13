@@ -18,6 +18,10 @@ A candidate is ineligible when it exceeds cash, founder-hour, or time-to-signal 
 
 The whole decision is blocked when the current constraint is `CONFLICTED` or `UNKNOWN`. Configured trust, delivery, or data-quality conflicts also block selection. A blocked decision may identify evidence to collect but cannot choose a move.
 
+## Independent arbiter assessment
+
+The planner cannot score its own proposal. After all blind critiques are frozen, exactly one independent `ARBITER` assessment supplies bounded ordinal scores and a justification for every score dimension. Assessment timestamps must follow the critique timestamps.
+
 ## Deterministic arbitration
 
 Eligible moves are scored with versioned ordinal inputs. The score is not a probability or revenue forecast. Positive dimensions reward constraint alignment, learning value, reversibility, feasibility, conversion readiness, and evidence strength. Trust, residual-risk, and exposure penalties reduce the score.

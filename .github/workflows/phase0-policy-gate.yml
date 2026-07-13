@@ -27,11 +27,9 @@ jobs:
         run: python3 scripts/verify_phase1.py
       - name: Run Phase 1 adversarial tests
         run: python3 -m unittest discover -s tests/phase1 -p 'test_*.py' -v
-      - name: Verify Phase 2 decision contracts
-        run: python3 scripts/verify_phase2_contracts.py
-      - name: Verify Phase 2 deterministic engine
-        run: python3 scripts/verify_phase2_engine.py
-      - name: Run Phase 2 tests
+      - name: Verify complete Phase 2 decision layer
+        run: python3 scripts/verify_phase2.py
+      - name: Run Phase 2 adversarial tests
         run: python3 -m unittest discover -s tests/phase2 -p 'test_*.py' -v
       - name: Compile Python entry points
         run: python3 -m py_compile robofox_truth/*.py robofox_decision/*.py scripts/*.py
