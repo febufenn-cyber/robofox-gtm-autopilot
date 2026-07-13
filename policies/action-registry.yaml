@@ -1,11 +1,12 @@
 {
-  "version": 2,
+  "version": 3,
   "default_decision": "deny",
   "actions": {
     "read_product_context": {"risk": "low", "minimum_level": "L0", "approval": "none", "enabled": true, "external": false, "reversible": true},
     "read_aggregate_metrics": {"risk": "low", "minimum_level": "L0", "approval": "none", "enabled": true, "external": false, "reversible": true},
     "generate_channel_plan": {"risk": "low", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true},
     "generate_weekly_review": {"risk": "low", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true},
+    "generate_position_snapshot": {"risk": "low", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true, "output_root": "snapshots/"},
     "create_outreach_draft": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true, "output_root": "drafts/"},
     "create_call_script_draft": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true, "output_root": "drafts/"},
     "propose_internal_crm_task": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true},

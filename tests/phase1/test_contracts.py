@@ -32,6 +32,7 @@ class Phase1ContractTests(unittest.TestCase):
         self.assertEqual(10, len(keys))
         self.assertEqual(len(keys), len(set(keys)))
         self.assertTrue(all(item["max_age_days"] > 0 for item in data["dimensions"]))
+        self.assertTrue(all(item["subject"] == "commercial-position" for item in data["dimensions"]))
 
     def test_restricted_is_a_first_class_sensitivity(self) -> None:
         for filename in ("source-record.schema.json", "claim-record.schema.json", "assumption-record.schema.json", "metric-record.schema.json"):

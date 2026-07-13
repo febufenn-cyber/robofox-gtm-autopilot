@@ -70,6 +70,8 @@ def verify(root: Path = ROOT) -> list[str]:
                 errors.append("position dimensions must contain 10 unique keys")
             if any(not isinstance(item.get("max_age_days"), int) or item["max_age_days"] < 1 for item in dimensions.get("dimensions", [])):
                 errors.append("every position dimension needs a positive max_age_days")
+            if any(item.get("subject") != "commercial-position" for item in dimensions.get("dimensions", [])):
+                errors.append("every position dimension must bind to commercial-position")
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"invalid position dimensions: {exc}")
 
