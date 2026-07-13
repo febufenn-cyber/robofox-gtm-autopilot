@@ -25,7 +25,9 @@ jobs:
         run: python3 -m unittest discover -s tests/phase0 -p 'test_*.py' -v
       - name: Verify Phase 1 truth contracts
         run: python3 scripts/verify_phase1_contracts.py
-      - name: Run Phase 1 contract tests
+      - name: Verify Phase 1 ledger
+        run: python3 scripts/verify_phase1_ledger.py
+      - name: Run Phase 1 tests
         run: python3 -m unittest discover -s tests/phase1 -p 'test_*.py' -v
       - name: Scan public repository
         run: python3 scripts/scan_public_repo.py

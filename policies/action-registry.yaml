@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "default_decision": "deny",
   "actions": {
     "read_product_context": {"risk": "low", "minimum_level": "L0", "approval": "none", "enabled": true, "external": false, "reversible": true},
@@ -9,6 +9,11 @@
     "create_outreach_draft": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true, "output_root": "drafts/"},
     "create_call_script_draft": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true, "output_root": "drafts/"},
     "propose_internal_crm_task": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true},
+    "initialize_truth_ledger": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": true},
+    "record_truth_source": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": false},
+    "record_truth_claim": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": false},
+    "record_truth_assumption": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": false},
+    "record_truth_metric": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": false},
     "create_internal_crm_task": {"risk": "medium", "minimum_level": "L2", "approval": "exact", "enabled": false, "external": false, "reversible": true},
     "update_experiment_status": {"risk": "medium", "minimum_level": "L2", "approval": "exact", "enabled": false, "external": false, "reversible": true},
     "send_email": {"risk": "high", "minimum_level": "L4", "approval": "exact", "enabled": false, "external": true, "reversible": false},

@@ -40,3 +40,22 @@ Higher-ranked evidence does not silently delete lower-ranked evidence. It change
 ## Private workspace
 
 The future ledger lives below `ROBOFOX_GTM_WORKSPACE`, outside this public engine. Public files contain only contracts, code, and synthetic tests.
+
+## Ledger commands
+
+Initialize the ledger in the private workspace:
+
+```bash
+python3 scripts/truth_store.py --workspace "$ROBOFOX_GTM_WORKSPACE" init
+```
+
+Insert a validated JSON record:
+
+```bash
+python3 scripts/truth_store.py --workspace "$ROBOFOX_GTM_WORKSPACE" add-source source.json
+python3 scripts/truth_store.py --workspace "$ROBOFOX_GTM_WORKSPACE" add-claim claim.json
+python3 scripts/truth_store.py --workspace "$ROBOFOX_GTM_WORKSPACE" add-assumption assumption.json
+python3 scripts/truth_store.py --workspace "$ROBOFOX_GTM_WORKSPACE" add-metric metric.json
+```
+
+Every write requires an exact approved internal action. The CLI has no update, delete, or arbitrary SQL command.
