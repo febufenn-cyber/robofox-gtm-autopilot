@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/assumption-record.schema.json",
+  "title": "Robofox planning assumption",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "product", "statement", "status", "confidence", "created_at", "sensitivity"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^ASM-[A-Z0-9-]{6,80}$"},
+    "product": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "statement": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "status": {"enum": ["OPEN", "SUPPORTED", "REFUTED", "RETIRED"]},
+    "confidence": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "review_by": {"type": ["string", "null"], "format": "date-time"},
+    "resolution_claim_ids": {"type": "array", "items": {"type": "string", "pattern": "^CLM-"}, "uniqueItems": true},
+    "supersedes_id": {"type": ["string", "null"], "pattern": "^ASM-"},
+    "sensitivity": {"enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/source-record.schema.json",
+  "title": "Robofox truth source",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "source_type", "captured_at", "sensitivity", "content_hash"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^SRC-[A-Z0-9-]{6,80}$"},
+    "source_type": {"enum": ["CUSTOMER_INTERVIEW", "CRM", "META_ADS", "CALL_TEST", "PRODUCT_TELEMETRY", "FOUNDER_OBSERVATION", "DOCUMENT", "PUBLIC_BENCHMARK", "OTHER"]},
+    "external_reference": {"type": ["string", "null"], "maxLength": 500},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "observed_at": {"type": ["string", "null"], "format": "date-time"},
+    "sensitivity": {"enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]},
+    "content_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "metadata": {"type": "object", "additionalProperties": true}
+  }
+}
