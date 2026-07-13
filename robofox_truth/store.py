@@ -7,7 +7,7 @@ import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Callable, Iterator
 
 from .constants import DB_RELATIVE_PATH, DEFAULT_WORKSPACE, ENGINE_ROOT, MIGRATIONS_ROOT, SCHEMA_VERSION
 from .validation import (
@@ -63,18 +63,41 @@ def connect(workspace: Path, *, initialize: bool = False) -> Iterator[sqlite3.Co
         connection.close()
 
 
+def _migration_files() -> list[tuple[int, Path]]:
+    result: list[tuple[int, Path]] = []
+    for path in sorted(MIGRATIONS_ROOT.glob("[0-9][0-9][0-9]_*.sql")):
+        try:
+            version = int(path.name.split("_", 1)[0])
+        except ValueError as exc:  # pragma: no cover
+            raise TruthStoreError(f"invalid migration filename: {path.name}") from exc
+        result.append((version, path))
+    versions = [version for version, _ in result]
+    if versions != list(range(1, SCHEMA_VERSION + 1)):
+        raise TruthStoreError(f"migration sequence differs: {versions}; expected 1..{SCHEMA_VERSION}")
+    return result
+
+
 def initialize(workspace: Path) -> Path:
-    migration = MIGRATIONS_ROOT / "001_initial.sql"
-    if not migration.is_file():
-        raise TruthStoreError("missing migration 001_initial.sql")
     with connect(workspace, initialize=True) as connection:
-        with connection:
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS schema_migrations (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)"
+        )
+        applied = {row[0] for row in connection.execute("SELECT version FROM schema_migrations")}
+        for version, migration in _migration_files():
+            if version in applied:
+                continue
             connection.executescript(migration.read_text(encoding="utf-8"))
-            connection.execute(
-                "INSERT OR IGNORE INTO schema_migrations(version, applied_at) VALUES (?, ?)",
-                (SCHEMA_VERSION, utc_now()),
-            )
-    return database_path(workspace)
+            with connection:
+                connection.execute(
+                    "INSERT INTO schema_migrations(version, applied_at) VALUES (?, ?)",
+                    (version, utc_now()),
+                )
+    path = database_path(workspace)
+    try:
+        path.chmod(0o600)
+    except OSError:
+        pass
+    return path
 
 
 def ensure_references(connection: sqlite3.Connection, table: str, ids: list[str]) -> None:
@@ -114,19 +137,30 @@ def ensure_supersedes(
         raise TruthStoreError(f"record is already superseded by {already[0]}")
 
 
-def insert_source(connection: sqlite3.Connection, raw: dict[str, Any]) -> str:
+def _write(connection: sqlite3.Connection, operation: Callable[[], None], *, commit: bool) -> None:
+    if commit:
+        with connection:
+            operation()
+    else:
+        operation()
+
+
+def insert_source(connection: sqlite3.Connection, raw: dict[str, Any], *, commit: bool = True) -> str:
     record = validate_source(raw)
     digest = record_hash(record)
-    with connection:
+
+    def operation() -> None:
         connection.execute(
             """INSERT INTO sources(id, source_type, external_reference, captured_at, observed_at, sensitivity, content_hash, metadata_json, record_hash, inserted_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (record["id"], record["source_type"], record["external_reference"], record["captured_at"], record["observed_at"], record["sensitivity"], record["content_hash"], canonical_json(record["metadata"]), digest, utc_now()),
         )
+
+    _write(connection, operation, commit=commit)
     return str(record["id"])
 
 
-def insert_claim(connection: sqlite3.Connection, raw: dict[str, Any]) -> str:
+def insert_claim(connection: sqlite3.Connection, raw: dict[str, Any], *, commit: bool = True) -> str:
     record = validate_claim(raw)
     ensure_references(connection, "sources", record["source_ids"])
     ensure_supersedes(
@@ -134,7 +168,8 @@ def insert_claim(connection: sqlite3.Connection, raw: dict[str, Any]) -> str:
         subject=str(record["subject"]), predicate=str(record["predicate"]),
     )
     digest = record_hash(record)
-    with connection:
+
+    def operation() -> None:
         connection.execute(
             """INSERT INTO claims(id, product, subject, predicate, value_json, unit, evidence_state, confidence, captured_at, observed_at, valid_from, valid_until, max_age_days, supersedes_id, sensitivity, notes, record_hash, inserted_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -144,15 +179,18 @@ def insert_claim(connection: sqlite3.Connection, raw: dict[str, Any]) -> str:
             "INSERT INTO claim_sources(claim_id, source_id) VALUES (?, ?)",
             [(record["id"], source_id) for source_id in record["source_ids"]],
         )
+
+    _write(connection, operation, commit=commit)
     return str(record["id"])
 
 
-def insert_assumption(connection: sqlite3.Connection, raw: dict[str, Any]) -> str:
+def insert_assumption(connection: sqlite3.Connection, raw: dict[str, Any], *, commit: bool = True) -> str:
     record = validate_assumption(raw)
     ensure_references(connection, "claims", record["resolution_claim_ids"])
     ensure_supersedes(connection, "assumptions", str(record["id"]), record["supersedes_id"], str(record["product"]))
     digest = record_hash(record)
-    with connection:
+
+    def operation() -> None:
         connection.execute(
             """INSERT INTO assumptions(id, product, statement, status, confidence, created_at, review_by, supersedes_id, sensitivity, record_hash, inserted_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -162,14 +200,17 @@ def insert_assumption(connection: sqlite3.Connection, raw: dict[str, Any]) -> st
             "INSERT INTO assumption_resolution_claims(assumption_id, claim_id) VALUES (?, ?)",
             [(record["id"], claim_id) for claim_id in record["resolution_claim_ids"]],
         )
+
+    _write(connection, operation, commit=commit)
     return str(record["id"])
 
 
-def insert_metric(connection: sqlite3.Connection, raw: dict[str, Any]) -> str:
+def insert_metric(connection: sqlite3.Connection, raw: dict[str, Any], *, commit: bool = True) -> str:
     record = validate_metric(raw)
     ensure_references(connection, "sources", record["source_ids"])
     digest = record_hash(record)
-    with connection:
+
+    def operation() -> None:
         connection.execute(
             """INSERT INTO metrics(id, product, metric, value, unit, denominator, sample_size, segment, experiment_id, period_start, period_end, captured_at, sensitivity, record_hash, inserted_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -179,11 +220,13 @@ def insert_metric(connection: sqlite3.Connection, raw: dict[str, Any]) -> str:
             "INSERT INTO metric_sources(metric_id, source_id) VALUES (?, ?)",
             [(record["id"], source_id) for source_id in record["source_ids"]],
         )
+
+    _write(connection, operation, commit=commit)
     return str(record["id"])
 
 
 def status(connection: sqlite3.Connection) -> dict[str, Any]:
-    tables = ("sources", "claims", "assumptions", "metrics")
+    tables = ("sources", "claims", "assumptions", "metrics", "approval_consumptions")
     counts = {table: connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] for table in tables}
     migrations = [row[0] for row in connection.execute("SELECT version FROM schema_migrations ORDER BY version")]
     return {"schema_version": max(migrations, default=0), "counts": counts, "append_only": True}

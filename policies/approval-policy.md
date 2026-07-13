@@ -1,17 +1,21 @@
 # Approval Policy
 
-Phase 0 does not enable external execution. This policy defines the contract future execution must satisfy.
+External execution remains disabled. Private truth-ledger mutations are the first actions that enforce the exact-approval contract end to end.
 
 An approval is valid only when it binds to:
 
-- one action identifier and action type
-- an exact normalized manifest hash
-- exact scope and maximum affected records
-- exact recipient or target when applicable
-- approving actor
-- approval timestamp and expiry
-- experiment or decision identifier
+- one action identifier and registered action type
+- an exact canonical manifest hash
+- the exact payload hash
+- one private workspace identity and ledger path
+- one record identifier, or the exact schema version for initialization
+- a maximum of one affected record and zero spend
+- requesting and approving actor labels
+- timezone-aware creation, approval, and expiry timestamps
+- a single-use approval identifier
 
-Approval becomes invalid when content, recipient, attachment, price, claim, budget, campaign, or scope changes. Approval cannot be reused after execution and cannot be replayed after expiry.
+Approval becomes invalid when payload, scope, action, workspace, target record, manifest, or expiry changes. The record insertion and approval consumption commit in one SQLite transaction. Consumed approval and action identifiers cannot be replayed.
 
-Broad phrases such as “send it,” “do all,” or “go ahead” are not sufficient to authorize an unbounded action. Missing or ambiguous approval fails closed.
+The `truth_approval.py approve` command requires a founder-controlled interactive terminal and an exact confirmation phrase. The approval is hash-bound and protected by the private workspace boundary; it is not a cryptographic proof of a human identity. Keep workspace permissions and the approving terminal under founder control.
+
+Broad phrases such as “send it,” “do all,” or “go ahead” never authorize an unbounded action. Missing, ambiguous, expired, mismatched, overlong, or previously consumed approval fails closed. The agent is forbidden from invoking `approve_truth_action`.

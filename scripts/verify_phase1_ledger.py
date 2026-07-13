@@ -3,10 +3,15 @@
 from __future__ import annotations
 
 import sqlite3
+import sys
 import tempfile
 from pathlib import Path
 
-from truth_store import connect, initialize, insert_claim, insert_source, resolve_workspace, status
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from robofox_truth import connect, initialize, insert_claim, insert_source, resolve_workspace, status
 
 
 def verify() -> list[str]:
@@ -42,9 +47,9 @@ def verify() -> list[str]:
             insert_source(connection, source)
             insert_claim(connection, claim)
             snapshot = status(connection)
-            if snapshot["schema_version"] != 1:
-                errors.append("schema version is not 1")
-            if snapshot["counts"] != {"sources": 1, "claims": 1, "assumptions": 0, "metrics": 0}:
+            if snapshot["schema_version"] != 2:
+                errors.append("schema version is not 2")
+            if snapshot["counts"] != {"sources": 1, "claims": 1, "assumptions": 0, "metrics": 0, "approval_consumptions": 0}:
                 errors.append(f"unexpected ledger counts: {snapshot['counts']}")
             try:
                 connection.execute("UPDATE claims SET confidence = 'HIGH' WHERE id = 'CLM-SMOKE-001'")
@@ -65,7 +70,7 @@ def main() -> int:
         return 1
     print("PHASE1 LEDGER: PASS")
     print("- private external workspace enforcement")
-    print("- migration version 1, foreign keys, WAL, and append-only triggers")
+    print("- migrations 1..2, foreign keys, WAL, and append-only triggers")
     print("- source-linked synthetic claim insertion")
     return 0
 

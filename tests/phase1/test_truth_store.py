@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sqlite3
 import sys
 import tempfile
@@ -64,7 +65,7 @@ class TruthStoreTests(unittest.TestCase):
     def test_init_and_status(self) -> None:
         with connect(self.workspace) as connection:
             self.assertEqual(
-                {"schema_version": 1, "counts": {"sources": 0, "claims": 0, "assumptions": 0, "metrics": 0}, "append_only": True},
+                {"schema_version": 2, "counts": {"sources": 0, "claims": 0, "assumptions": 0, "metrics": 0, "approval_consumptions": 0}, "append_only": True},
                 status(connection),
             )
 
@@ -170,10 +171,57 @@ class TruthStoreTests(unittest.TestCase):
                     supersedes_id="CLM-TEST-0001",
                 ))
 
+
+
+    def test_initialize_upgrades_version_one_database(self) -> None:
+        import sqlite3
+        from robofox_truth.constants import MIGRATIONS_ROOT
+        from robofox_truth.store import database_path
+
+        upgrade_root = Path(self.temp.name) / "upgrade-workspace"
+        upgrade_root.mkdir()
+        path = database_path(upgrade_root)
+        path.parent.mkdir(parents=True)
+        connection = sqlite3.connect(path)
+        connection.executescript((MIGRATIONS_ROOT / "001_initial.sql").read_text())
+        connection.execute(
+            "INSERT INTO schema_migrations(version, applied_at) VALUES (1, ?)",
+            ("2026-07-13T10:00:00+05:30",),
+        )
+        connection.commit()
+        connection.close()
+        initialize(upgrade_root)
+        with connect(upgrade_root) as upgraded:
+            versions = [row[0] for row in upgraded.execute("SELECT version FROM schema_migrations ORDER BY version")]
+            self.assertEqual([1, 2], versions)
+            table = upgraded.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='approval_consumptions'"
+            ).fetchone()
+            self.assertIsNotNone(table)
+
+    def test_non_finite_numbers_are_rejected(self) -> None:
+        metric = {
+            "id": "MET-TEST-NAN01",
+            "product": "voice-agents",
+            "metric": "successful_call_rate",
+            "value": float("nan"),
+            "unit": "ratio",
+            "source_ids": [SOURCE["id"]],
+            "period_start": "2026-07-13T08:00:00+05:30",
+            "period_end": "2026-07-13T09:00:00+05:30",
+            "captured_at": "2026-07-13T09:02:00+05:30",
+            "sensitivity": "INTERNAL",
+        }
+        with connect(self.workspace) as connection:
+            insert_source(connection, SOURCE)
+            with self.assertRaisesRegex(TruthStoreError, "canonical JSON"):
+                insert_metric(connection, metric)
+
     def test_no_update_or_delete_cli_commands_exist(self) -> None:
         script = (ROOT / "scripts/truth_store.py").read_text()
         self.assertNotIn('add_parser("update', script)
         self.assertNotIn('add_parser("delete', script)
+        self.assertNotIn("arbitrary SQL", script.lower().replace("does not expose ", ""))
 
 
 if __name__ == "__main__":

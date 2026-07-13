@@ -8,7 +8,7 @@ ENGINE_ROOT = Path(__file__).resolve().parents[1]
 MIGRATIONS_ROOT = ENGINE_ROOT / "truth" / "migrations"
 DEFAULT_WORKSPACE = "~/private/robofox-gtm-workspace"
 DB_RELATIVE_PATH = Path("truth") / "robofox_truth.sqlite3"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 SOURCE_TYPES = {
     "CUSTOMER_INTERVIEW", "CRM", "META_ADS", "CALL_TEST", "PRODUCT_TELEMETRY",

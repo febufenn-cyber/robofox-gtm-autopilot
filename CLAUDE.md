@@ -13,4 +13,7 @@ Before any GTM task:
 9. Distinguish missing data, an observed zero, and an unknown value.
 10. Treat position snapshots as derived views; surface stale and conflicting claims rather than hiding them.
 11. Keep the truth ledger and all real operating evidence under `ROBOFOX_GTM_WORKSPACE`, outside this public engine.
-12. On ambiguity, missing policy, invalid schema, tool failure, or kill switch: stop and record the blocker.
+12. Never invoke `approve_truth_action`; approval belongs to a founder-controlled interactive terminal.
+13. Never use low-level insert functions for operational records. Use the manifest, approval, private-state, and single-use CLI path.
+14. Verify truth-ledger integrity before relying on a position snapshot when out-of-band modification is suspected.
+15. On ambiguity, missing policy, invalid schema, tool failure, integrity failure, or kill switch: stop and record the blocker.

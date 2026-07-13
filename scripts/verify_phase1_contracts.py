@@ -20,6 +20,12 @@ REQUIRED_FILES = [
     "schemas/assumption-record.schema.json",
     "schemas/metric-record.schema.json",
     "schemas/position-snapshot.schema.json",
+    "policies/approval-policy.md",
+    "truth/migrations/002_approval_consumptions.sql",
+    "robofox_truth/approval.py",
+    "robofox_truth/integrity.py",
+    "scripts/truth_approval.py",
+    "scripts/verify_phase1_approvals.py",
 ]
 
 EVIDENCE_STATES = {"VERIFIED", "OBSERVED", "INFERRED", "ASSUMED", "UNKNOWN", "PROHIBITED"}
@@ -74,6 +80,31 @@ def verify(root: Path = ROOT) -> list[str]:
                 errors.append("every position dimension must bind to commercial-position")
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"invalid position dimensions: {exc}")
+
+
+    registry_path = root / "policies/action-registry.yaml"
+    if registry_path.is_file():
+        try:
+            registry = json.loads(registry_path.read_text(encoding="utf-8"))
+            actions = registry.get("actions", {})
+            required_actions = {
+                "prepare_truth_action", "approve_truth_action", "initialize_truth_ledger",
+                "record_truth_source", "record_truth_claim", "record_truth_assumption",
+                "record_truth_metric", "verify_truth_integrity", "generate_position_snapshot",
+            }
+            missing_actions = sorted(required_actions - set(actions))
+            if missing_actions:
+                errors.append(f"action registry missing Phase 1 actions: {missing_actions}")
+            if actions.get("approve_truth_action", {}).get("approval") != "forbidden":
+                errors.append("agent approval action must be forbidden")
+            for name in (
+                "initialize_truth_ledger", "record_truth_source", "record_truth_claim",
+                "record_truth_assumption", "record_truth_metric",
+            ):
+                if actions.get(name, {}).get("approval") != "exact":
+                    errors.append(f"truth mutation must require exact approval: {name}")
+        except (OSError, json.JSONDecodeError) as exc:
+            errors.append(f"invalid action registry: {exc}")
 
     policy = root / "policies/truth-layer-policy.md"
     if policy.is_file():
