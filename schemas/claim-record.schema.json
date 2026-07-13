@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/claim-record.schema.json",
+  "title": "Robofox truth claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "product", "subject", "predicate", "value", "evidence_state", "confidence", "captured_at", "sensitivity"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^CLM-[A-Z0-9-]{6,80}$"},
+    "product": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "subject": {"type": "string", "minLength": 1, "maxLength": 120},
+    "predicate": {"type": "string", "pattern": "^[a-z][a-z0-9_]{1,79}$"},
+    "value": {},
+    "unit": {"type": ["string", "null"], "maxLength": 40},
+    "evidence_state": {"enum": ["VERIFIED", "OBSERVED", "INFERRED", "ASSUMED", "UNKNOWN", "PROHIBITED"]},
+    "confidence": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+    "source_ids": {"type": "array", "items": {"type": "string", "pattern": "^SRC-"}, "uniqueItems": true},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "observed_at": {"type": ["string", "null"], "format": "date-time"},
+    "valid_from": {"type": ["string", "null"], "format": "date-time"},
+    "valid_until": {"type": ["string", "null"], "format": "date-time"},
+    "max_age_days": {"type": ["integer", "null"], "minimum": 1, "maximum": 3650},
+    "supersedes_id": {"type": ["string", "null"], "pattern": "^CLM-"},
+    "sensitivity": {"enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]},
+    "notes": {"type": ["string", "null"], "maxLength": 2000}
+  }
+}

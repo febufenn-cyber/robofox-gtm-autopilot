@@ -1,4 +1,4 @@
-name: Phase 0 policy gate
+name: Robofox policy and truth gate
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  phase0:
+  policy-and-truth:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -21,7 +21,11 @@ jobs:
         run: python3 scripts/verify_repo.py
       - name: Verify Phase 0 constitution
         run: python3 scripts/verify_phase0.py
-      - name: Run adversarial policy tests
+      - name: Run Phase 0 adversarial policy tests
         run: python3 -m unittest discover -s tests/phase0 -p 'test_*.py' -v
+      - name: Verify Phase 1 truth contracts
+        run: python3 scripts/verify_phase1_contracts.py
+      - name: Run Phase 1 contract tests
+        run: python3 -m unittest discover -s tests/phase1 -p 'test_*.py' -v
       - name: Scan public repository
         run: python3 scripts/scan_public_repo.py

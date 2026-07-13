@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/position-snapshot.schema.json",
+  "title": "Robofox derived position snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "product", "as_of", "generated_at", "dimensions", "conflicts", "stale_claim_ids", "open_assumption_ids", "unknown_dimensions", "input_record_ids"],
+  "properties": {
+    "version": {"const": 1},
+    "product": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "dimensions": {"type": "object", "additionalProperties": {"type": "object"}},
+    "conflicts": {"type": "array", "items": {"type": "object"}},
+    "stale_claim_ids": {"type": "array", "items": {"type": "string", "pattern": "^CLM-"}, "uniqueItems": true},
+    "open_assumption_ids": {"type": "array", "items": {"type": "string", "pattern": "^ASM-"}, "uniqueItems": true},
+    "unknown_dimensions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "restricted_records_excluded": {"type": "integer", "minimum": 0},
+    "input_record_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+  }
+}

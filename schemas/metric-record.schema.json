@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/metric-record.schema.json",
+  "title": "Robofox measured metric",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "product", "metric", "value", "period_start", "period_end", "captured_at", "sensitivity"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^MET-[A-Z0-9-]{6,80}$"},
+    "product": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "metric": {"type": "string", "pattern": "^[a-z][a-z0-9_]{1,79}$"},
+    "value": {"type": "number"},
+    "unit": {"type": "string", "minLength": 1, "maxLength": 40},
+    "denominator": {"type": ["number", "null"], "minimum": 0},
+    "sample_size": {"type": ["integer", "null"], "minimum": 0},
+    "segment": {"type": ["string", "null"], "maxLength": 120},
+    "experiment_id": {"type": ["string", "null"], "maxLength": 100},
+    "source_ids": {"type": "array", "items": {"type": "string", "pattern": "^SRC-"}, "uniqueItems": true},
+    "period_start": {"type": "string", "format": "date-time"},
+    "period_end": {"type": "string", "format": "date-time"},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "sensitivity": {"enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"]}
+  }
+}

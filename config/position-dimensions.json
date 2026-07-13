@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "dimensions": [
+    {"key": "icp_clarity", "label": "ICP clarity", "max_age_days": 90},
+    {"key": "problem_urgency", "label": "Problem urgency", "max_age_days": 60},
+    {"key": "proof_strength", "label": "Proof strength", "max_age_days": 45},
+    {"key": "customer_access", "label": "Customer access", "max_age_days": 30},
+    {"key": "delivery_readiness", "label": "Delivery readiness", "max_age_days": 14},
+    {"key": "unit_economics", "label": "Unit economics", "max_age_days": 30},
+    {"key": "founder_capacity", "label": "Founder capacity", "max_age_days": 7},
+    {"key": "customer_trust", "label": "Customer trust", "max_age_days": 30},
+    {"key": "data_quality", "label": "Data quality", "max_age_days": 14},
+    {"key": "current_constraint", "label": "Current constraint", "max_age_days": 14}
+  ]
+}
