@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/experiment-transition.schema.json",
+  "title": "experiment-transition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version","id","experiment_id","from_state","to_state","reason","actor","occurred_at"],
+  "properties": {
+    "version": {"const": 1},
+    "id": {"type": "string", "pattern": "^XTR-"},
+    "experiment_id": {"type": "string", "pattern": "^EXP-"},
+    "from_state": {"enum": ["DRAFT","REVIEWED","APPROVED","LIVE","PAUSED","COMPLETED","KILLED"]},
+    "to_state": {"enum": ["DRAFT","REVIEWED","APPROVED","LIVE","PAUSED","COMPLETED","KILLED"]},
+    "reason": {"type": "string", "minLength": 5},
+    "actor": {"type": "string", "minLength": 2},
+    "occurred_at": {"type": "string", "format": "date-time"}
+  }
+}
