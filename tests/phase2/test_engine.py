@@ -35,7 +35,7 @@ class EngineTests(unittest.TestCase):
         with self.assertRaisesRegex(DecisionError,'planner → critic → arbiter'): arbitrate(s,q,c,r,a)
     def test_cash_limit_makes_candidate_ineligible(self):
         s,q,c,r,a=fixtures(); c[0]['exposure']['cash_usd']=101
-        first=next(x for x in arbitrate(s,q,c,r(a)['candidate_results'] if x['candidate_id']=='MOV-SYNTH-001'); self.assertIn('cash exposure exceeds limit',first['blockers'])
+        first=next(x for x in arbitrate(s,q,c,r,a)['candidate_results'] if x['candidate_id']=='MOV-SYNTH-001'); self.assertIn('cash exposure exceeds limit',first['blockers'])
     def test_material_threat_requires_prophylaxis(self):
         s,q,c,r,a=fixtures(); r[0]['prophylaxis']=[]
         first=next(x for x in arbitrate(s,q,c,r,a)['candidate_results'] if x['candidate_id']=='MOV-SYNTH-001'); self.assertIn('material threat lacks prophylaxis',first['blockers'])
