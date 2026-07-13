@@ -4,18 +4,61 @@
   "title": "Robofox derived position snapshot",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "product", "as_of", "generated_at", "dimensions", "conflicts", "stale_claim_ids", "open_assumption_ids", "unknown_dimensions", "input_record_ids"],
+  "required": [
+    "version", "product", "as_of", "generated_at", "dimensions", "conflicts",
+    "stale_claim_ids", "open_assumption_ids", "overdue_assumption_ids",
+    "unknown_dimensions", "restricted_records_excluded",
+    "prohibited_claims_excluded", "input_record_ids"
+  ],
   "properties": {
     "version": {"const": 1},
     "product": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
     "as_of": {"type": "string", "format": "date-time"},
     "generated_at": {"type": "string", "format": "date-time"},
-    "dimensions": {"type": "object", "additionalProperties": {"type": "object"}},
-    "conflicts": {"type": "array", "items": {"type": "object"}},
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "status"],
+        "properties": {
+          "label": {"type": "string"},
+          "status": {"enum": ["VERIFIED", "OBSERVED", "INFERRED", "ASSUMED", "STALE", "CONFLICTED", "UNKNOWN"]},
+          "value": {},
+          "unit": {"type": ["string", "null"]},
+          "claim_id": {"type": "string", "pattern": "^CLM-"},
+          "claim_ids": {"type": "array", "items": {"type": "string", "pattern": "^CLM-"}, "uniqueItems": true},
+          "evidence_state": {"enum": ["VERIFIED", "OBSERVED", "INFERRED", "ASSUMED", "UNKNOWN"]},
+          "confidence": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+          "observed_at": {"type": "string", "format": "date-time"},
+          "stale_reasons": {"type": "array", "items": {"enum": ["valid_until_passed", "maximum_age_exceeded"]}, "uniqueItems": true},
+          "value_withheld": {"type": "boolean"}
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["subject", "predicate", "claim_ids", "values", "stale_claim_ids", "resolution", "blocks_dimension"],
+        "properties": {
+          "subject": {"type": "string"},
+          "predicate": {"type": "string"},
+          "claim_ids": {"type": "array", "items": {"type": "string", "pattern": "^CLM-"}, "uniqueItems": true},
+          "values": {"type": "array"},
+          "stale_claim_ids": {"type": "array", "items": {"type": "string", "pattern": "^CLM-"}, "uniqueItems": true},
+          "resolution": {"enum": ["UNRESOLVED", "STALE_DISAGREEMENT"]},
+          "blocks_dimension": {"type": "boolean"}
+        }
+      }
+    },
     "stale_claim_ids": {"type": "array", "items": {"type": "string", "pattern": "^CLM-"}, "uniqueItems": true},
     "open_assumption_ids": {"type": "array", "items": {"type": "string", "pattern": "^ASM-"}, "uniqueItems": true},
+    "overdue_assumption_ids": {"type": "array", "items": {"type": "string", "pattern": "^ASM-"}, "uniqueItems": true},
     "unknown_dimensions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "restricted_records_excluded": {"type": "integer", "minimum": 0},
-    "input_record_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+    "prohibited_claims_excluded": {"type": "integer", "minimum": 0},
+    "input_record_ids": {"type": "array", "items": {"type": "string", "pattern": "^(SRC|CLM|ASM)-"}, "uniqueItems": true}
   }
 }

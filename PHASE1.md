@@ -39,7 +39,7 @@ Higher-ranked evidence does not silently delete lower-ranked evidence. It change
 
 ## Private workspace
 
-The future ledger lives below `ROBOFOX_GTM_WORKSPACE`, outside this public engine. Public files contain only contracts, code, and synthetic tests.
+The ledger lives below `ROBOFOX_GTM_WORKSPACE`, outside this public engine. Public files contain only contracts, code, and synthetic tests.
 
 ## Ledger commands
 
@@ -59,3 +59,27 @@ python3 scripts/truth_store.py --workspace "$ROBOFOX_GTM_WORKSPACE" add-metric m
 ```
 
 Every write requires an exact approved internal action. The CLI has no update, delete, or arbitrary SQL command.
+
+## Position snapshots
+
+Generate a historical or current board-state evaluation from the private ledger:
+
+```bash
+python3 scripts/build_position_snapshot.py voice-agents \
+  --workspace "$ROBOFOX_GTM_WORKSPACE" \
+  --as-of "2026-07-13T12:00:00+05:30" \
+  --stdout
+```
+
+The engine:
+
+- resolves only records that existed at the requested `as_of` time
+- follows supersession without rewriting history
+- distinguishes unknown, stale, conflicted, and supported dimensions
+- blocks a value only when multiple current claims disagree
+- surfaces stale disagreement without allowing obsolete evidence to paralyse the current position
+- excludes `RESTRICTED` and `PROHIBITED` values from generated output
+- writes uniquely named, atomic JSON and Markdown artifacts under the private workspace `snapshots/` directory
+- records claim, source, and open-assumption IDs for traceability
+
+Position snapshots are derived artifacts. Correct the ledger with a superseding record, then regenerate the snapshot; do not edit the snapshot as evidence.
