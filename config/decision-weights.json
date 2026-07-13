@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "ordinal_scale": {"minimum": 1, "maximum": 5},
+  "candidate_count": {"minimum": 2, "maximum": 5},
+  "positive_weights": {
+    "constraint_alignment": 0.25,
+    "learning_value": 0.20,
+    "reversibility": 0.15,
+    "execution_feasibility": 0.15,
+    "conversion_readiness": 0.10,
+    "evidence_strength": 0.15
+  },
+  "penalty_weights": {
+    "trust_risk": 0.10,
+    "residual_risk": 0.15,
+    "cash_exposure": 0.10,
+    "founder_time_exposure": 0.10,
+    "signal_time_exposure": 0.05
+  },
+  "hard_block_conflicted_dimensions": [
+    "current_constraint",
+    "customer_trust",
+    "delivery_readiness",
+    "data_quality"
+  ],
+  "hard_block_unknown_dimensions": ["current_constraint"],
+  "prophylaxis_required_at": 3,
+  "score_precision": 4,
+  "tie_break_order": [
+    "residual_risk",
+    "trust_risk",
+    "cash_usd",
+    "founder_hours",
+    "days_to_signal",
+    "candidate_id"
+  ]
+}

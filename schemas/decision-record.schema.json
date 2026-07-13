@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/decision-record.schema.json",
+  "title": "Robofox deterministic strategic decision record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version","decision_id","product","snapshot_hash","status","chosen_candidate_id","current_constraint","candidate_results","rejected_alternatives","unresolved_conflicts","unknown_dimensions","assumptions","maximum_exposure","rationale","confidence","evidence_that_changes_decision","score_method","input_hashes","created_at"],
+  "properties": {
+    "version": {"const": 1},
+    "decision_id": {"type": "string", "pattern": "^DEC-"},
+    "product": {"type": "string"},
+    "snapshot_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "status": {"enum": ["CHOSEN","NO_MOVE","NEEDS_EVIDENCE","BLOCKED_CONFLICT"]},
+    "chosen_candidate_id": {"type": ["string","null"], "pattern": "^MOV-"},
+    "current_constraint": {},
+    "candidate_results": {
+      "type": "array", "minItems": 2, "maxItems": 5,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["candidate_id","eligible","blockers","positive_score","penalty_score","final_score","rank"],
+        "properties": {
+          "candidate_id": {"type": "string", "pattern": "^MOV-"},
+          "eligible": {"type": "boolean"},
+          "blockers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "positive_score": {"type": "number"},
+          "penalty_score": {"type": "number"},
+          "final_score": {"type": "number"},
+          "rank": {"type": ["integer","null"], "minimum": 1}
+        }
+      }
+    },
+    "rejected_alternatives": {"type": "array", "items": {"type": "object"}},
+    "unresolved_conflicts": {"type": "array"},
+    "unknown_dimensions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "assumptions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "maximum_exposure": {"type": "object"},
+    "rationale": {"type": "string", "minLength": 10},
+    "confidence": {"enum": ["LOW","MEDIUM","HIGH"]},
+    "evidence_that_changes_decision": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "score_method": {"type": "object"},
+    "input_hashes": {"type": "object"},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}
