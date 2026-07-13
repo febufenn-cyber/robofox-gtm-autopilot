@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/adversarial-review.schema.json",
+  "title": "Robofox blind adversarial candidate review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version","review_id","candidate_id","snapshot_hash","reviewer_role","blind_review","saw_other_critiques","strongest_refutation","failure_modes","disconfirming_evidence","threat_level","prophylaxis","residual_risk","reviewed_at"],
+  "properties": {
+    "version": {"const": 1},
+    "review_id": {"type": "string", "pattern": "^REV-[A-Z0-9-]{6,80}$"},
+    "candidate_id": {"type": "string", "pattern": "^MOV-"},
+    "snapshot_hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "reviewer_role": {"const": "CRITIC"},
+    "blind_review": {"const": true},
+    "saw_other_critiques": {"const": false},
+    "strongest_refutation": {"type": "string", "minLength": 10, "maxLength": 2000},
+    "failure_modes": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 5, "maxLength": 500}, "uniqueItems": true},
+    "disconfirming_evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 5, "maxLength": 500}, "uniqueItems": true},
+    "threat_level": {"type": "integer", "minimum": 1, "maximum": 5},
+    "prophylaxis": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["threat","mitigation","verification"],
+        "properties": {
+          "threat": {"type": "string", "minLength": 5, "maxLength": 500},
+          "mitigation": {"type": "string", "minLength": 5, "maxLength": 500},
+          "verification": {"type": "string", "minLength": 5, "maxLength": 500}
+        }
+      }
+    },
+    "residual_risk": {"type": "integer", "minimum": 1, "maximum": 5},
+    "reviewed_at": {"type": "string", "format": "date-time"}
+  }
+}
