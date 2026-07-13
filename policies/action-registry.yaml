@@ -1,28 +1,210 @@
 {
-  "version": 3,
+  "version": 4,
   "default_decision": "deny",
   "actions": {
-    "read_product_context": {"risk": "low", "minimum_level": "L0", "approval": "none", "enabled": true, "external": false, "reversible": true},
-    "read_aggregate_metrics": {"risk": "low", "minimum_level": "L0", "approval": "none", "enabled": true, "external": false, "reversible": true},
-    "generate_channel_plan": {"risk": "low", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true},
-    "generate_weekly_review": {"risk": "low", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true},
-    "generate_position_snapshot": {"risk": "low", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true, "output_root": "snapshots/"},
-    "create_outreach_draft": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true, "output_root": "drafts/"},
-    "create_call_script_draft": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true, "output_root": "drafts/"},
-    "propose_internal_crm_task": {"risk": "medium", "minimum_level": "L1", "approval": "none", "enabled": true, "external": false, "reversible": true},
-    "initialize_truth_ledger": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": true},
-    "record_truth_source": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": false},
-    "record_truth_claim": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": false},
-    "record_truth_assumption": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": false},
-    "record_truth_metric": {"risk": "medium", "minimum_level": "L1", "approval": "exact", "enabled": true, "external": false, "reversible": false},
-    "create_internal_crm_task": {"risk": "medium", "minimum_level": "L2", "approval": "exact", "enabled": false, "external": false, "reversible": true},
-    "update_experiment_status": {"risk": "medium", "minimum_level": "L2", "approval": "exact", "enabled": false, "external": false, "reversible": true},
-    "send_email": {"risk": "high", "minimum_level": "L4", "approval": "exact", "enabled": false, "external": true, "reversible": false},
-    "send_whatsapp": {"risk": "high", "minimum_level": "L4", "approval": "exact", "enabled": false, "external": true, "reversible": false},
-    "place_phone_call": {"risk": "high", "minimum_level": "L4", "approval": "exact", "enabled": false, "external": true, "reversible": false},
-    "publish_content": {"risk": "high", "minimum_level": "L4", "approval": "exact", "enabled": false, "external": true, "reversible": false},
-    "change_meta_campaign": {"risk": "critical", "minimum_level": "L4", "approval": "exact", "enabled": false, "external": true, "reversible": false},
-    "change_meta_budget": {"risk": "critical", "minimum_level": "L4", "approval": "exact", "enabled": false, "external": true, "reversible": false},
-    "export_contacts": {"risk": "critical", "minimum_level": "L4", "approval": "forbidden", "enabled": false, "external": true, "reversible": false}
+    "read_product_context": {
+      "risk": "low",
+      "minimum_level": "L0",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "read_aggregate_metrics": {
+      "risk": "low",
+      "minimum_level": "L0",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "verify_truth_integrity": {
+      "risk": "low",
+      "minimum_level": "L0",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "generate_channel_plan": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "generate_weekly_review": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "generate_position_snapshot": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true,
+      "output_root": "snapshots/"
+    },
+    "prepare_truth_action": {
+      "risk": "low",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true,
+      "output_root": "approvals/pending/"
+    },
+    "approve_truth_action": {
+      "risk": "high",
+      "minimum_level": "L4",
+      "approval": "forbidden",
+      "enabled": false,
+      "external": false,
+      "reversible": false
+    },
+    "create_outreach_draft": {
+      "risk": "medium",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true,
+      "output_root": "drafts/"
+    },
+    "create_call_script_draft": {
+      "risk": "medium",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true,
+      "output_root": "drafts/"
+    },
+    "propose_internal_crm_task": {
+      "risk": "medium",
+      "minimum_level": "L1",
+      "approval": "none",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "initialize_truth_ledger": {
+      "risk": "medium",
+      "minimum_level": "L1",
+      "approval": "exact",
+      "enabled": true,
+      "external": false,
+      "reversible": true
+    },
+    "record_truth_source": {
+      "risk": "medium",
+      "minimum_level": "L1",
+      "approval": "exact",
+      "enabled": true,
+      "external": false,
+      "reversible": false
+    },
+    "record_truth_claim": {
+      "risk": "medium",
+      "minimum_level": "L1",
+      "approval": "exact",
+      "enabled": true,
+      "external": false,
+      "reversible": false
+    },
+    "record_truth_assumption": {
+      "risk": "medium",
+      "minimum_level": "L1",
+      "approval": "exact",
+      "enabled": true,
+      "external": false,
+      "reversible": false
+    },
+    "record_truth_metric": {
+      "risk": "medium",
+      "minimum_level": "L1",
+      "approval": "exact",
+      "enabled": true,
+      "external": false,
+      "reversible": false
+    },
+    "create_internal_crm_task": {
+      "risk": "medium",
+      "minimum_level": "L2",
+      "approval": "exact",
+      "enabled": false,
+      "external": false,
+      "reversible": true
+    },
+    "update_experiment_status": {
+      "risk": "medium",
+      "minimum_level": "L2",
+      "approval": "exact",
+      "enabled": false,
+      "external": false,
+      "reversible": true
+    },
+    "send_email": {
+      "risk": "high",
+      "minimum_level": "L4",
+      "approval": "exact",
+      "enabled": false,
+      "external": true,
+      "reversible": false
+    },
+    "send_whatsapp": {
+      "risk": "high",
+      "minimum_level": "L4",
+      "approval": "exact",
+      "enabled": false,
+      "external": true,
+      "reversible": false
+    },
+    "place_phone_call": {
+      "risk": "high",
+      "minimum_level": "L4",
+      "approval": "exact",
+      "enabled": false,
+      "external": true,
+      "reversible": false
+    },
+    "publish_content": {
+      "risk": "high",
+      "minimum_level": "L4",
+      "approval": "exact",
+      "enabled": false,
+      "external": true,
+      "reversible": false
+    },
+    "change_meta_campaign": {
+      "risk": "critical",
+      "minimum_level": "L4",
+      "approval": "exact",
+      "enabled": false,
+      "external": true,
+      "reversible": false
+    },
+    "change_meta_budget": {
+      "risk": "critical",
+      "minimum_level": "L4",
+      "approval": "exact",
+      "enabled": false,
+      "external": true,
+      "reversible": false
+    },
+    "export_contacts": {
+      "risk": "critical",
+      "minimum_level": "L4",
+      "approval": "forbidden",
+      "enabled": false,
+      "external": true,
+      "reversible": false
+    }
   }
 }

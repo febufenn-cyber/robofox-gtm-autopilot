@@ -192,3 +192,24 @@ Create the operating workspace outside this public engine:
 ```bash
 python3 scripts/bootstrap_private_workspace.py ~/private/robofox-gtm-workspace
 ```
+
+
+## 10. Phase 1 private truth layer
+
+Phase 1 adds the board-state engine beneath the GTM skills:
+
+- immutable, source-linked sources, claims, assumptions, and metrics
+- private SQLite storage with ordered migrations and append-only triggers
+- historical position snapshots with unknown, stale, and conflict states
+- restricted/prohibited-data redaction and source traceability
+- exact payload/workspace/action approvals for every ledger mutation
+- single-use approval consumption and canonical record-hash integrity checks
+
+Start with [`PHASE1.md`](PHASE1.md). The safe bootstrap keeps the private kill switch active and does not initialize the database automatically:
+
+```bash
+python3 scripts/bootstrap_private_workspace.py ~/private/robofox-gtm-workspace
+python3 scripts/verify_phase1.py
+```
+
+The agent may prepare a truth action but is forbidden from approving it. Real evidence, approvals, snapshots, and SQLite files remain outside this public repository.

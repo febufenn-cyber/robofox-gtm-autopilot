@@ -1,9 +1,13 @@
 {
-  "version": 1,
+  "version": 2,
   "engine_root": "~/projects/robofox-gtm-autopilot",
   "workspace_root": "~/private/robofox-gtm-workspace",
   "workspace_repository_visibility": "private",
   "allow_workspace_inside_engine": false,
   "default_classification": "INTERNAL",
-  "store_customer_identifiers": false
+  "store_customer_identifiers": false,
+  "workspace_id_required": true,
+  "private_system_state": "system-state.json",
+  "truth_schema_version": 2,
+  "truth_database": "truth/robofox_truth.sqlite3"
 }

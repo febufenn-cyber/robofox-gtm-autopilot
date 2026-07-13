@@ -28,7 +28,13 @@ class TruthStoreError(ValueError):
 
 
 def canonical_json(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    try:
+        return json.dumps(
+            value, sort_keys=True, separators=(",", ":"),
+            ensure_ascii=False, allow_nan=False,
+        )
+    except (TypeError, ValueError) as exc:
+        raise TruthStoreError(f"value is not canonical JSON: {exc}") from exc
 
 
 def record_hash(record: dict[str, Any]) -> str:
@@ -94,7 +100,7 @@ def require_string_list(value: Any, field: str, prefix: str) -> list[str]:
         raise TruthStoreError(f"{field} must be a list of {prefix} identifiers")
     if len(value) != len(set(value)):
         raise TruthStoreError(f"{field} contains duplicates")
-    return value
+    return sorted(value)
 
 
 def validate_source(record: dict[str, Any]) -> dict[str, Any]:

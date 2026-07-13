@@ -114,3 +114,13 @@ if phase0_errors:
         print(f'- {error}')
     sys.exit(1)
 print('- Phase 0 default-deny, public/private, schema, scanner, and source-lock checks pass')
+
+# Phase 1 is part of repository validity.
+from verify_phase1 import verify as verify_phase1
+phase1_errors = verify_phase1()
+if phase1_errors:
+    print('PHASE1 VERIFY: FAIL')
+    for error in phase1_errors:
+        print(f'- {error}')
+    sys.exit(1)
+print('- Phase 1 contracts, ledger, position, approval, and integrity checks pass')
