@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/experiment-execution.schema.json",
+  "title": "experiment-execution",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version","id","experiment_id","units","cash_spent_usd","founder_hours","source_ids","notes","occurred_at"],
+  "properties": {
+    "version": {"const": 1},
+    "id": {"type": "string", "pattern": "^EXE-"},
+    "experiment_id": {"type": "string", "pattern": "^EXP-"},
+    "units": {"type": "integer", "minimum": 0},
+    "cash_spent_usd": {"type": "number", "minimum": 0},
+    "founder_hours": {"type": "number", "minimum": 0},
+    "source_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^SRC-"}},
+    "notes": {"type": ["string","null"]},
+    "occurred_at": {"type": "string", "format": "date-time"}
+  }
+}

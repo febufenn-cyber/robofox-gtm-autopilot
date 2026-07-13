@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/experiment-observation.schema.json",
+  "title": "experiment-observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version","id","experiment_id","metric","value","unit","sample_size","denominator","source_ids","observed_at"],
+  "properties": {
+    "version": {"const": 1},
+    "id": {"type": "string", "pattern": "^OBS-"},
+    "experiment_id": {"type": "string", "pattern": "^EXP-"},
+    "metric": {"type": "string", "minLength": 2},
+    "value": {"type": "number"},
+    "unit": {"type": "string", "minLength": 1},
+    "sample_size": {"type": "integer", "minimum": 0},
+    "denominator": {"type": ["number","null"], "minimum": 0},
+    "source_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^SRC-"}},
+    "observed_at": {"type": "string", "format": "date-time"}
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://robofox.local/schemas/experiment-outcome.schema.json",
+  "title": "experiment-outcome",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version","id","experiment_id","outcome","conclusion","learning","belief_updates","evidence_observation_ids","criterion_results","triggered_hard_stop","next_action","transition"],
+  "properties": {
+    "version": {"const": 1},
+    "id": {"type": "string", "pattern": "^OUT-"},
+    "experiment_id": {"type": "string", "pattern": "^EXP-"},
+    "outcome": {"enum": ["SUCCESS","FAILED","SAFETY_STOP","CANCELLED"]},
+    "conclusion": {"type": "string", "minLength": 10},
+    "learning": {"type": "string", "minLength": 10},
+    "belief_updates": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["belief","previous_state","new_state","confidence","evidence_ids"], "properties": {"belief": {"type": "string"}, "previous_state": {"type": "string"}, "new_state": {"type": "string"}, "confidence": {"enum": ["LOW","MEDIUM","HIGH"]}, "evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}}}},
+    "evidence_observation_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^OBS-"}},
+    "criterion_results": {"type": "object", "additionalProperties": false, "required": ["success","kill"], "properties": {
+      "success": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["metric","operator","threshold","unit","minimum_sample_size","observation_id","observed_value","sample_size","status"], "properties": {"metric": {"type": "string"}, "operator": {"enum": ["GTE","LTE","GT","LT","EQ"]}, "threshold": {"type": "number"}, "unit": {"type": "string"}, "minimum_sample_size": {"type": "integer", "minimum": 0}, "observation_id": {"type": ["string","null"], "pattern": "^OBS-"}, "observed_value": {"type": ["number","null"]}, "sample_size": {"type": "integer", "minimum": 0}, "status": {"enum": ["MET","NOT_MET","INSUFFICIENT_DATA"]}}}},
+      "kill": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["metric","operator","threshold","unit","minimum_sample_size","observation_id","observed_value","sample_size","status"], "properties": {"metric": {"type": "string"}, "operator": {"enum": ["GTE","LTE","GT","LT","EQ"]}, "threshold": {"type": "number"}, "unit": {"type": "string"}, "minimum_sample_size": {"type": "integer", "minimum": 0}, "observation_id": {"type": ["string","null"], "pattern": "^OBS-"}, "observed_value": {"type": ["number","null"]}, "sample_size": {"type": "integer", "minimum": 0}, "status": {"enum": ["MET","NOT_MET","INSUFFICIENT_DATA"]}}}}
+    }},
+    "triggered_hard_stop": {"type": ["string","null"]},
+    "next_action": {"type": "string", "minLength": 5},
+    "transition": {"type": "object", "additionalProperties": false, "required": ["version","id","experiment_id","from_state","to_state","reason","actor","occurred_at"], "properties": {"version": {"const": 1}, "id": {"type": "string", "pattern": "^XTR-"}, "experiment_id": {"type": "string", "pattern": "^EXP-"}, "from_state": {"enum": ["DRAFT","REVIEWED","APPROVED","LIVE","PAUSED","COMPLETED","KILLED"]}, "to_state": {"enum": ["DRAFT","REVIEWED","APPROVED","LIVE","PAUSED","COMPLETED","KILLED"]}, "reason": {"type": "string", "minLength": 5}, "actor": {"type": "string", "minLength": 2}, "occurred_at": {"type": "string", "format": "date-time"}}}
+  }
+}
