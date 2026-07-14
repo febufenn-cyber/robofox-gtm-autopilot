@@ -1,4 +1,4 @@
-name: Robofox complete Phase 0-6 gate
+name: Robofox complete Phase 0-7 gate
 on:
   pull_request:
   push:
@@ -18,7 +18,8 @@ jobs:
       - {name: Verify Phase 4, run: "python3 scripts/verify_phase4.py && python3 -m unittest discover -s tests/phase4 -p 'test_*.py' -v"}
       - {name: Verify Phase 5, run: "python3 scripts/verify_phase5.py && python3 -m unittest discover -s tests/phase5 -p 'test_*.py' -v"}
       - {name: Verify Phase 6, run: "python3 scripts/verify_phase6.py && python3 -m unittest discover -s tests/phase6 -p 'test_*.py' -v"}
-      - {name: Compile, run: "python3 -m py_compile robofox_truth/*.py robofox_decision/*.py robofox_experiment/*.py robofox_execution/*.py robofox_revenue/*.py robofox_learning/*.py scripts/*.py"}
+      - {name: Verify Phase 7, run: "python3 scripts/verify_phase7.py && python3 -m unittest discover -s tests/phase7 -p 'test_*.py' -v"}
+      - {name: Compile, run: "python3 -m py_compile robofox_truth/*.py robofox_decision/*.py robofox_experiment/*.py robofox_execution/*.py robofox_revenue/*.py robofox_learning/*.py robofox_ops/*.py scripts/*.py"}
       - {name: Scan, run: python3 scripts/scan_public_repo.py}
   aggregate-gate:
     runs-on: ubuntu-latest
