@@ -1,0 +1,1 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","additionalProperties":false,"properties":{"allocations":{"type":"object"},"scores":{"type":"object"},"sensitivity":{"type":"object"},"uncertainty":{"type":"string"},"generated_at":{"type":"string"}},"required":["allocations","scores","sensitivity","uncertainty","generated_at"]}

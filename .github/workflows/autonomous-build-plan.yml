@@ -11,5 +11,5 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with: {submodules: recursive, fetch-depth: 1}
       - {run: python3 scripts/verify_autonomous_build_plan.py}
-      - {run: python3 scripts/verify_autonomous_build_plan.py --phase 6 --readiness}
+      - {run: python3 scripts/verify_autonomous_build_plan.py --phase 7 --readiness}
       - {run: "python3 -m unittest discover -s tests/roadmap -p 'test_*.py' -v"}
