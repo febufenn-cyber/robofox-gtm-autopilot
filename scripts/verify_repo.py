@@ -92,3 +92,12 @@ if phase3_errors:
     for error in phase3_errors: print(f'- {error}')
     sys.exit(1)
 print('- Phase 3 pre-registration, lifecycle, collision, exposure, criteria, approval, and integrity checks pass')
+
+for phase in range(4,8):
+    module=__import__(f'verify_phase{phase}')
+    phase_errors=module.verify()
+    if phase_errors:
+        print(f'PHASE{phase} VERIFY: FAIL')
+        for error in phase_errors: print(f'- {error}')
+        sys.exit(1)
+    print(f'- Phase {phase} verifier passes')
