@@ -1,33 +1,27 @@
-name: Robofox policy, truth, decision, experiment, and execution gate
+name: Robofox complete Phase 0-5 gate
 on:
   pull_request:
   push:
     branches: [main]
-permissions:
-  contents: read
+permissions: {contents: read}
 jobs:
   complete-gate:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with: {submodules: recursive, fetch-depth: 1, show-progress: false}
-      - {name: Verify Phase 0 constitution, run: python3 scripts/verify_phase0.py}
-      - {name: Run Phase 0 adversarial tests, run: "python3 -m unittest discover -s tests/phase0 -p 'test_*.py' -v"}
-      - {name: Verify Phase 1 truth layer, run: python3 scripts/verify_phase1.py}
-      - {name: Run Phase 1 adversarial tests, run: "python3 -m unittest discover -s tests/phase1 -p 'test_*.py' -v"}
-      - {name: Verify Phase 2 decision layer, run: python3 scripts/verify_phase2.py}
-      - {name: Run Phase 2 adversarial tests, run: "python3 -m unittest discover -s tests/phase2 -p 'test_*.py' -v"}
-      - {name: Verify Phase 3 experiment layer, run: python3 scripts/verify_phase3.py}
-      - {name: Run Phase 3 adversarial tests, run: "python3 -m unittest discover -s tests/phase3 -p 'test_*.py' -v"}
-      - {name: Verify Phase 4 execution gateway, run: python3 scripts/verify_phase4.py}
-      - {name: Run Phase 4 adversarial tests, run: "python3 -m unittest discover -s tests/phase4 -p 'test_*.py' -v"}
-      - {name: Compile Python entry points, run: "python3 -m py_compile robofox_truth/*.py robofox_decision/*.py robofox_experiment/*.py robofox_execution/*.py scripts/*.py"}
-      - {name: Scan public repository, run: python3 scripts/scan_public_repo.py}
+      - {name: Verify Phase 0, run: "python3 scripts/verify_phase0.py && python3 -m unittest discover -s tests/phase0 -p 'test_*.py' -v"}
+      - {name: Verify Phase 1, run: "python3 scripts/verify_phase1.py && python3 -m unittest discover -s tests/phase1 -p 'test_*.py' -v"}
+      - {name: Verify Phase 2, run: "python3 scripts/verify_phase2.py && python3 -m unittest discover -s tests/phase2 -p 'test_*.py' -v"}
+      - {name: Verify Phase 3, run: "python3 scripts/verify_phase3.py && python3 -m unittest discover -s tests/phase3 -p 'test_*.py' -v"}
+      - {name: Verify Phase 4, run: "python3 scripts/verify_phase4.py && python3 -m unittest discover -s tests/phase4 -p 'test_*.py' -v"}
+      - {name: Verify Phase 5, run: "python3 scripts/verify_phase5.py && python3 -m unittest discover -s tests/phase5 -p 'test_*.py' -v"}
+      - {name: Compile, run: "python3 -m py_compile robofox_truth/*.py robofox_decision/*.py robofox_experiment/*.py robofox_execution/*.py robofox_revenue/*.py scripts/*.py"}
+      - {name: Scan, run: python3 scripts/scan_public_repo.py}
   aggregate-gate:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with: {submodules: recursive, fetch-depth: 1, show-progress: false}
-      - {name: Verify aggregate GTM repository, run: python3 scripts/verify_repo.py}
+      - {name: Verify aggregate repository, run: python3 scripts/verify_repo.py}

@@ -1,0 +1,12 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE IF NOT EXISTS commercial_entities(id TEXT PRIMARY KEY,kind TEXT NOT NULL,account_id TEXT,segment TEXT,region TEXT,created_at TEXT NOT NULL,source TEXT NOT NULL,external_key_hash TEXT NOT NULL,status TEXT NOT NULL,record_json TEXT NOT NULL,record_hash TEXT NOT NULL,FOREIGN KEY(account_id) REFERENCES commercial_entities(id));
+CREATE TABLE IF NOT EXISTS lifecycle_events(id TEXT PRIMARY KEY,opportunity_id TEXT NOT NULL,account_id TEXT NOT NULL,stage TEXT NOT NULL,occurred_at TEXT NOT NULL,source TEXT NOT NULL,experiment_id TEXT,channel TEXT,first_touch TEXT,self_reported_source TEXT,conversion_touch TEXT,consent_status TEXT NOT NULL,record_json TEXT NOT NULL,record_hash TEXT NOT NULL,FOREIGN KEY(opportunity_id) REFERENCES commercial_entities(id),FOREIGN KEY(account_id) REFERENCES commercial_entities(id));
+CREATE TABLE IF NOT EXISTS revenue_records(id TEXT PRIMARY KEY,opportunity_id TEXT NOT NULL,amount REAL NOT NULL,currency TEXT NOT NULL,kind TEXT NOT NULL,occurred_at TEXT NOT NULL,source_id TEXT NOT NULL,record_json TEXT NOT NULL,record_hash TEXT NOT NULL,FOREIGN KEY(opportunity_id) REFERENCES commercial_entities(id));
+CREATE TABLE IF NOT EXISTS qualification_overrides(id TEXT PRIMARY KEY,opportunity_id TEXT NOT NULL,from_status TEXT NOT NULL,to_status TEXT NOT NULL,reason TEXT NOT NULL,occurred_at TEXT NOT NULL,record_json TEXT NOT NULL,record_hash TEXT NOT NULL,FOREIGN KEY(opportunity_id) REFERENCES commercial_entities(id));
+CREATE TABLE IF NOT EXISTS ingestion_runs(id TEXT PRIMARY KEY,source TEXT NOT NULL,cursor TEXT NOT NULL,record_count INTEGER NOT NULL,snapshot_hash TEXT NOT NULL,UNIQUE(source,cursor));
+CREATE TRIGGER IF NOT EXISTS entities_no_update BEFORE UPDATE ON commercial_entities BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS entities_no_delete BEFORE DELETE ON commercial_entities BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS events_no_update BEFORE UPDATE ON lifecycle_events BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS events_no_delete BEFORE DELETE ON lifecycle_events BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS revenue_no_update BEFORE UPDATE ON revenue_records BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS revenue_no_delete BEFORE DELETE ON revenue_records BEGIN SELECT RAISE(ABORT,'append-only');END;
