@@ -1,25 +1,17 @@
 name: Robofox autonomous build charter gate
-
 on:
   pull_request:
   push:
     branches: [main]
-
 permissions:
   contents: read
-
 jobs:
   autonomous-build-charter:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          submodules: recursive
-          fetch-depth: 1
-      - name: Verify autonomous build charter
-        run: python3 scripts/verify_autonomous_build_plan.py
-      - name: Verify next phase readiness
-        run: python3 scripts/verify_autonomous_build_plan.py --phase 4 --readiness
-      - name: Run roadmap tests
-        run: python3 -m unittest discover -s tests/roadmap -p 'test_*.py' -v
+        with: {submodules: recursive, fetch-depth: 1}
+      - {name: Verify autonomous build charter, run: python3 scripts/verify_autonomous_build_plan.py}
+      - {name: Verify next phase readiness, run: python3 scripts/verify_autonomous_build_plan.py --phase 5 --readiness}
+      - {name: Run roadmap tests, run: "python3 -m unittest discover -s tests/roadmap -p 'test_*.py' -v"}
