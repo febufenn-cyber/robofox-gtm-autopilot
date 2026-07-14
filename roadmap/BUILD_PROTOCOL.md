@@ -1,0 +1,1 @@
+The autonomous build protocol is defined by `AUTONOMOUS_BUILD_CHARTER.md` and verified by `scripts/verify_autonomous_build_plan.py`.
