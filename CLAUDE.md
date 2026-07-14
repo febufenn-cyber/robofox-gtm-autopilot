@@ -12,11 +12,12 @@ Before any GTM task:
 8. Distinguish verified, observed, inferred, assumed, stale, conflicted, unknown, prohibited, partial, and ambiguous states.
 9. Keep truth, decisions, experiments, executions, approvals, and real evidence under `ROBOFOX_GTM_WORKSPACE`.
 10. Never invoke `approve_truth_action`, `approve_experiment_action`, or `approve_execution_action`; approval belongs to a founder-controlled interactive terminal.
-11. Freeze one snapshot for Phase 2, keep planner/critic/arbiter roles separate, and replay the final decision.
-12. Bind every experiment to a replay-verified chosen candidate and pre-register metrics, thresholds, hard stops, dates, dimensions, and exposure.
-13. Derive experiment state from immutable transitions and never treat `LIVE` as external execution permission.
-14. Bind every execution envelope to one experiment, exact content hash, pseudonymous targets, idempotency key, adapter, rate limit, rollback truth, and zero simulator spend.
-15. Require a matching one-record successful canary before any batch.
-16. Treat `PARTIAL` and `AMBIGUOUS` as unresolved; never retry an irreversible or ambiguous action automatically.
-17. Keep `external_execution` false. The released gateway has no network adapter and no production execution path.
-18. Stop on kill switch, mismatch, replay, stale canary, rate overflow, open circuit, integrity failure, or unknown action.
+11. Keep roles separate: the PLANNER proposes without scores; each blind CRITIC reviews one candidate without other critiques; the ARBITER scores only after candidates and critiques are frozen.
+12. Run deterministic arbitration and verify the decision record; a decision record is advice, never execution approval.
+13. Bind every experiment to a replay-verified chosen candidate and pre-register metrics, thresholds, hard stops, dates, dimensions, and exposure.
+14. Derive experiment state from immutable transitions and never treat `LIVE` as external execution permission.
+15. Bind every execution envelope to one experiment, exact content hash, pseudonymous targets, idempotency key, adapter, rate limit, rollback truth, and zero simulator spend.
+16. Require a matching one-record successful canary before any batch.
+17. Treat `PARTIAL` and `AMBIGUOUS` as unresolved; never retry an irreversible or ambiguous action automatically.
+18. Keep `external_execution` false. The released gateway has no network adapter and no production execution path.
+19. Stop on kill switch, mismatch, replay, stale canary, rate overflow, open circuit, integrity failure, or unknown action.
