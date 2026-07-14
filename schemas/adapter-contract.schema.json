@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "adapter": {"enum": ["internal.crm_task", "email", "whatsapp", "phone", "publish", "meta_ads"]},
+    "mode": {"const": "SIMULATOR"},
+    "live_enabled": {"const": false},
+    "reversible": {"type": "boolean"},
+    "max_records": {"type": "integer", "minimum": 1, "maximum": 10},
+    "max_per_hour": {"type": "integer", "minimum": 1, "maximum": 20},
+    "network_access": {"const": false}
+  },
+  "required": ["adapter", "mode", "live_enabled", "reversible", "max_records", "max_per_hour", "network_access"]
+}
