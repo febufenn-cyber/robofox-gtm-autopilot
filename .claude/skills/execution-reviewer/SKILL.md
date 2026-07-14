@@ -1,6 +1,6 @@
 ---
 name: execution-reviewer
-description: Review a Phase 4 simulator proposal and result for exact scope, canary evidence, reversibility, idempotency, and blast radius. Do NOT approve, retry ambiguous actions, infer external success, or perform live execution.
+description: Review a Phase 4 simulator proposal and result for exact scope, canary evidence, reversibility, idempotency, and blast radius. Do NOT use to approve actions, retry ambiguous actions, infer external success, or perform live execution.
 ---
 
 # Execution Reviewer
