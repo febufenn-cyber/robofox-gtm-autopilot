@@ -1,41 +1,27 @@
-name: Robofox policy, truth, decision, and experiment gate
-
+name: Robofox policy, truth, decision, experiment, and execution gate
 on:
   pull_request:
   push:
     branches: [main]
-
 permissions:
   contents: read
-
 jobs:
-  policy-truth-decision-experiment:
+  complete-gate:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          submodules: recursive
-          fetch-depth: 1
-      - name: Verify existing GTM repository
-        run: python3 scripts/verify_repo.py
-      - name: Verify Phase 0 constitution
-        run: python3 scripts/verify_phase0.py
-      - name: Run Phase 0 adversarial policy tests
-        run: python3 -m unittest discover -s tests/phase0 -p 'test_*.py' -v
-      - name: Verify complete Phase 1 truth layer
-        run: python3 scripts/verify_phase1.py
-      - name: Run Phase 1 adversarial tests
-        run: python3 -m unittest discover -s tests/phase1 -p 'test_*.py' -v
-      - name: Verify complete Phase 2 decision layer
-        run: python3 scripts/verify_phase2.py
-      - name: Run Phase 2 adversarial tests
-        run: python3 -m unittest discover -s tests/phase2 -p 'test_*.py' -v
-      - name: Verify complete Phase 3 experiment layer
-        run: python3 scripts/verify_phase3.py
-      - name: Run Phase 3 adversarial tests
-        run: python3 -m unittest discover -s tests/phase3 -p 'test_*.py' -v
-      - name: Compile Python entry points
-        run: python3 -m py_compile robofox_truth/*.py robofox_decision/*.py robofox_experiment/*.py scripts/*.py
-      - name: Scan public repository
-        run: python3 scripts/scan_public_repo.py
+        with: {submodules: recursive, fetch-depth: 1}
+      - {name: Verify existing GTM repository, run: python3 scripts/verify_repo.py}
+      - {name: Verify Phase 0 constitution, run: python3 scripts/verify_phase0.py}
+      - {name: Run Phase 0 adversarial tests, run: "python3 -m unittest discover -s tests/phase0 -p 'test_*.py' -v"}
+      - {name: Verify Phase 1 truth layer, run: python3 scripts/verify_phase1.py}
+      - {name: Run Phase 1 adversarial tests, run: "python3 -m unittest discover -s tests/phase1 -p 'test_*.py' -v"}
+      - {name: Verify Phase 2 decision layer, run: python3 scripts/verify_phase2.py}
+      - {name: Run Phase 2 adversarial tests, run: "python3 -m unittest discover -s tests/phase2 -p 'test_*.py' -v"}
+      - {name: Verify Phase 3 experiment layer, run: python3 scripts/verify_phase3.py}
+      - {name: Run Phase 3 adversarial tests, run: "python3 -m unittest discover -s tests/phase3 -p 'test_*.py' -v"}
+      - {name: Verify Phase 4 execution gateway, run: python3 scripts/verify_phase4.py}
+      - {name: Run Phase 4 adversarial tests, run: "python3 -m unittest discover -s tests/phase4 -p 'test_*.py' -v"}
+      - {name: Compile Python entry points, run: "python3 -m py_compile robofox_truth/*.py robofox_decision/*.py robofox_experiment/*.py robofox_execution/*.py scripts/*.py"}
+      - {name: Scan public repository, run: python3 scripts/scan_public_repo.py}
