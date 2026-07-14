@@ -1,1 +1,1 @@
-Phase 6 is implemented. Phase 7 — Production Hardening and Operator Console — is the next eligible core phase. Phases 8–9 remain readiness-gated.
+Core v1 Phases 0–7 are implemented. Phase 8 and Phase 9 are DEFERRED by their readiness gates: Phase 8 needs at least two validated products and observed shared-resource conflicts; Phase 9 needs sufficient clean historical cases and frozen evaluation datasets. Production deployment remains a founder-controlled manual action.
