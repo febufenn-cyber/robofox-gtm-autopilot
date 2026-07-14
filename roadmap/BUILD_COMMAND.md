@@ -1,0 +1,1 @@
+Say `build` to begin the verified autonomous implementation sequence defined in `AUTONOMOUS_BUILD_CHARTER.md`.

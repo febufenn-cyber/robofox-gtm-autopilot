@@ -1,0 +1,1 @@
+Repository engineering may proceed autonomously after `build`; live credentials, external actions, spending, production deployment, and constitutional weakening remain prohibited.

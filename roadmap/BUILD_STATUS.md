@@ -1,0 +1,1 @@
+Current autonomous roadmap status: Phase 4 is the first eligible implementation phase. Phases 8–9 remain readiness-gated.

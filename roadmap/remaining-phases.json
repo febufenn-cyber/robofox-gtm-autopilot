@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "build_command": "build",
+  "default_target": [4, 5, 6, 7],
+  "advanced_target": [8, 9],
+  "autonomous_repository_actions": [
+    "inspect_main",
+    "create_branch",
+    "implement_code",
+    "add_migrations",
+    "write_tests",
+    "run_verification",
+    "open_pull_request",
+    "fix_focused_ci_failures",
+    "merge_green_pull_request",
+    "verify_main"
+  ],
+  "never_autonomous_actions": [
+    "use_real_credentials",
+    "contact_customer",
+    "send_email",
+    "send_whatsapp",
+    "place_phone_call",
+    "mutate_live_crm",
+    "change_live_ads",
+    "spend_money",
+    "publish_public_content",
+    "export_contacts",
+    "deploy_production",
+    "weaken_constitution"
+  ],
+  "phases": [
+    {
+      "phase": 4,
+      "name": "Controlled Execution Gateway",
+      "classification": "core",
+      "depends_on": [3],
+      "objective": "Build the exact-approval, idempotent, canary-first boundary between internal intent and side effects while keeping live external adapters disabled by default.",
+      "deliverables": ["execution contracts", "simulator adapters", "idempotency ledger", "canary and rate limits", "rollback records", "operator review package"],
+      "exit_checks": ["all adapters default to simulator", "unknown actions denied", "exact approval enforced", "idempotency replay blocked", "one-record canary required", "external and financial actions disabled by default"],
+      "readiness_files": ["PHASE3.md", "policies/experiment-layer-policy.md"],
+      "verification_command": "python3 scripts/verify_phase4.py",
+      "forbidden_actions": ["live external send", "live CRM mutation", "live advertising change", "real spending", "real credential use"]
+    },
+    {
+      "phase": 5,
+      "name": "Revenue Operations Loop",
+      "classification": "core",
+      "depends_on": [4],
+      "objective": "Normalize and reconcile the commercial journey from lead to revenue with explainable qualification, multi-touch attribution, exception handling, and Phase 4-gated actions.",
+      "deliverables": ["commercial entity contracts", "read-only connector ingestion", "pipeline event model", "multi-touch attribution", "qualification engine", "revenue reconciliation", "exception queue"],
+      "exit_checks": ["incremental ingestion replayable", "missing data explicit", "attribution fields separated", "qualification explainable", "writes remain gateway-gated", "synthetic lead-to-revenue test passes"],
+      "readiness_files": ["PHASE4.md", "policies/execution-layer-policy.md"],
+      "verification_command": "python3 scripts/verify_phase5.py",
+      "forbidden_actions": ["ungated CRM write", "automatic customer follow-up", "single-field attribution collapse", "prohibited-attribute qualification"]
+    },
+    {
+      "phase": 6,
+      "name": "Learning and Portfolio Optimizer",
+      "classification": "core",
+      "depends_on": [5],
+      "objective": "Turn immutable outcomes into calibrated belief updates, benchmark overrides, and explainable portfolio recommendations without changing real spend or execution.",
+      "deliverables": ["prediction outcome records", "belief updates", "calibration reports", "benchmark hierarchy", "channel scorecards", "portfolio allocator", "sensitivity analysis"],
+      "exit_checks": ["beliefs trace to evidence", "calibration measured", "sample gates enforced", "uncertainty surfaced", "no automatic spend change", "recommendations replayable"],
+      "readiness_files": ["PHASE5.md", "policies/revenue-operations-policy.md"],
+      "verification_command": "python3 scripts/verify_phase6.py",
+      "forbidden_actions": ["automatic budget reallocation", "automatic campaign launch", "simulated evidence treated as real", "confidence increase without evidence"]
+    },
+    {
+      "phase": 7,
+      "name": "Production Hardening and Operator Console",
+      "classification": "core",
+      "depends_on": [6],
+      "objective": "Deliver a private, observable, recoverable v1 with an operator console, role boundaries, backups, runbooks, staging deployment, and production controls.",
+      "deliverables": ["private operator console", "RBAC", "secrets interface", "observability", "backup and restore", "job control", "staging deployment", "security review", "runbooks"],
+      "exit_checks": ["Phase 0-7 gate green", "staging backup restore proven", "RBAC server-side", "secrets absent from logs", "staging rollback proven", "production deployment remains manual"],
+      "readiness_files": ["PHASE6.md", "policies/learning-layer-policy.md"],
+      "verification_command": "python3 scripts/verify_phase7.py",
+      "forbidden_actions": ["autonomous production deploy", "real credential rotation", "public service exposure", "client-side authorization only"]
+    },
+    {
+      "phase": 8,
+      "name": "Multi-product and Multi-agent Scaling",
+      "classification": "advanced",
+      "depends_on": [7],
+      "objective": "Coordinate multiple products, agents, shared audiences, experiment slots, and founder capacity without duplicate execution or cross-product leakage.",
+      "deliverables": ["portfolio contracts", "global scheduler", "agent leasing", "capacity allocator", "cross-product evidence rules", "portfolio decision records"],
+      "exit_checks": ["readiness gate recorded", "duplicate work prevented", "data boundaries tested", "audience collisions detected", "allocation replayable", "single-product mode preserved"],
+      "readiness_files": ["PHASE7.md", "reports/operational-readiness.json"],
+      "verification_command": "python3 scripts/verify_phase8.py",
+      "forbidden_actions": ["authority expansion through agent count", "cross-product private-data leakage", "unbounded concurrency"]
+    },
+    {
+      "phase": 9,
+      "name": "Self-Improving Evaluation and Simulation",
+      "classification": "advanced",
+      "depends_on": [7],
+      "objective": "Improve prompts, policies, skills, and decision quality through offline evaluation and simulation without autonomous production self-modification.",
+      "deliverables": ["versioned eval datasets", "scenario simulator", "regression benchmarks", "champion challenger workflow", "red-team corpus", "drift detection", "reviewed promotion process"],
+      "exit_checks": ["readiness gate recorded", "evaluation contamination blocked", "safety regression blocks promotion", "promotion requires reviewed PR", "simulation labeled", "production self-modification disabled"],
+      "readiness_files": ["PHASE7.md", "reports/evaluation-readiness.json"],
+      "verification_command": "python3 scripts/verify_phase9.py",
+      "forbidden_actions": ["self-merging safeguard changes", "direct production prompt mutation", "simulation treated as real evidence", "training on frozen evaluation set"]
+    }
+  ]
+}
