@@ -8,4 +8,5 @@ repos:
       - {id: robofox-phase4, name: Phase 4, entry: python3 scripts/verify_phase4.py, language: system, pass_filenames: false}
       - {id: robofox-phase5, name: Phase 5, entry: python3 scripts/verify_phase5.py, language: system, pass_filenames: false}
       - {id: robofox-phase6, name: Phase 6, entry: python3 scripts/verify_phase6.py, language: system, pass_filenames: false}
+      - {id: robofox-phase7, name: Phase 7, entry: python3 scripts/verify_phase7.py, language: system, pass_filenames: false}
       - {id: robofox-public-scan, name: Public scan, entry: python3 scripts/scan_public_repo.py, language: system, pass_filenames: false}

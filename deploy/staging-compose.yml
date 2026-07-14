@@ -1,0 +1,17 @@
+services:
+  robofox-operator:
+    image: python:3.12-slim
+    working_dir: /app
+    command: ["python3", "-m", "http.server", "8765", "--bind", "127.0.0.1"]
+    network_mode: none
+    read_only: true
+    environment:
+      ROBOFOX_ENVIRONMENT: staging
+      ROBOFOX_EXTERNAL_EXECUTION: "false"
+    volumes:
+      - ../:/app:ro
+      - robofox-staging-data:/data
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  robofox-staging-data:
