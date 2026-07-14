@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS predictions(id TEXT PRIMARY KEY,record_json TEXT NOT NULL,record_hash TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS outcomes(id TEXT PRIMARY KEY,record_json TEXT NOT NULL,record_hash TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS belief_updates(id TEXT PRIMARY KEY,record_json TEXT NOT NULL,record_hash TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS portfolio_recommendations(id TEXT PRIMARY KEY,record_json TEXT NOT NULL,record_hash TEXT NOT NULL);
+CREATE TRIGGER IF NOT EXISTS predictions_no_update BEFORE UPDATE ON predictions BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS predictions_no_delete BEFORE DELETE ON predictions BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS outcomes_no_update BEFORE UPDATE ON outcomes BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS outcomes_no_delete BEFORE DELETE ON outcomes BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS beliefs_no_update BEFORE UPDATE ON belief_updates BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS beliefs_no_delete BEFORE DELETE ON belief_updates BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS portfolios_no_update BEFORE UPDATE ON portfolio_recommendations BEGIN SELECT RAISE(ABORT,'append-only');END;
+CREATE TRIGGER IF NOT EXISTS portfolios_no_delete BEFORE DELETE ON portfolio_recommendations BEGIN SELECT RAISE(ABORT,'append-only');END;
